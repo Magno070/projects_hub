@@ -1,0 +1,17 @@
+[
+  {
+    "initialRange": 0,
+    "finalRange": 100,
+    "discount": 0
+  },
+  {
+    "initialRange": 100,
+    "finalRange": 200,
+    "discount": 2
+  },
+  {
+    "initialRange": 200,
+    "finalRange": 300,
+    "discount": 3
+  }
+]
