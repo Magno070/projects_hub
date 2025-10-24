@@ -51,7 +51,7 @@ lib/
 │ │ │ ├── repositories/
 │ │ │ └── usecases/
 │ │ └── presentation/
-│ │ ├── bloc/
+│ │ ├── provider/
 │ │ ├── pages/
 │ │ └── widgets/
 │ └── [other_features]/ # Other features
@@ -100,7 +100,7 @@ Contains the core business logic:
 PRESENTATION Layer
 Manages the user interface and user interaction:
 
-- bloc/: State management (using the BLoC pattern).
+- provider/: State management (using the Provider package).
 - pages/: Application screens.
 - widgets/: UI components specific to the feature.
 
@@ -113,10 +113,10 @@ Contains components that are reusable across different features:
 
 Data Flow
 
-UI (Presentation) -> BLoC -> UseCase -> Repository -> DataSource -> API/Database
+UI (Presentation) -> Provider -> UseCase -> Repository -> DataSource -> API/Database
 
-1. The UI triggers an event to the BLoC.
-2. The BLoC calls the appropriate UseCase.
+1. The UI triggers an event to the Provider.
+2. The Provider calls the appropriate UseCase.
 3. The UseCase executes the business logic and interacts with the Repository.
 4. The Repository determines which DataSource to use (remote or local).
 5. The DataSource fetches the data from the API or a local database.
@@ -126,7 +126,7 @@ Technologies and Patterns
 
 State Management
 
-- BLoC Pattern with flutter_bloc.
+- Provider with Provider package.
 - Immutable states with equatable.
 
 Dependency Injection
@@ -162,7 +162,7 @@ Files
 Classes
 
 - PascalCase for class names.
-- Descriptive names: UserModel, UserBloc, GetUsers.
+- Descriptive names: UserModel, UserProvider, GetUsers.
 
 Variables and Methods
 
