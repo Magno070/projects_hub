@@ -18,14 +18,14 @@ class DiscountsTableHeader extends StatelessWidget {
 
   Widget _buildTableCell(String text, {bool isLast = false}) {
     return Expanded(
-      child: shared.TableCell(
+      child: shared.EditableTableCell(
+        onValueChanged: (value) {
+          print(value);
+        },
         color: const Color.fromARGB(255, 219, 219, 219),
         borderColor: Colors.black,
         isLast: isLast,
-        child: Padding(
-          padding: const EdgeInsets.only(left: 8.0),
-          child: Text(text, style: TextStyle(fontSize: 18)),
-        ),
+        text: text,
       ),
     );
   }

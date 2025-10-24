@@ -31,13 +31,13 @@ class DiscountTableRepositoryImpl implements DiscountTableRepository {
     String tableId,
     String? nickname,
     String? discountType,
-    List<DiscountTableRangeEntity>? discountRanges,
+    List<DiscountTableRangeEntity>? ranges,
   ) async {
     await _dataSource.updateDiscountTable(
       tableId,
       nickname,
       discountType,
-      discountRanges?.map((range) => range.toModel()).toList(),
+      ranges?.map((range) => range.toModel()).toList(),
     );
   }
 }

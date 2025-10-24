@@ -33,8 +33,30 @@ class DiscountsApiDataSourceImpl implements DiscountsApiDataSource {
   @override
   Future<DiscountsTableModel> getDiscountTable(String tableId) async {
     try {
-      final responseJson = await _apiClient.get('/$tableId');
-      return DiscountsTableModel.fromJson(jsonDecode(responseJson));
+      final responseString = await _apiClient.get('/$tableId');
+
+      final responseJson = jsonDecode(responseString);
+
+      final success = responseJson['success'];
+
+      if (success) {
+        final discountTableData = responseJson['data']['discountTable'];
+
+        // Mapeia 'ranges' para 'discountRanges' para compatibilidade com o modelo
+        // final mappedData = {
+        //   '_id': discountTableData['_id'],
+        //   'nickname': discountTableData['nickname'],
+        //   'discountType': discountTableData['discountType'],
+        //   'discountRanges':
+        //       discountTableData['ranges'], // Mapeia 'ranges' para 'discountRanges'
+        // };
+
+        return DiscountsTableModel.fromJson(discountTableData);
+      } else {
+        throw Exception(
+          'API returned unsuccessful response: ${responseJson['message']}',
+        );
+      }
     } catch (e) {
       throw Exception('Failed to get discount table: $e');
     }
@@ -45,13 +67,13 @@ class DiscountsApiDataSourceImpl implements DiscountsApiDataSource {
     String tableId,
     String? nickname,
     String? discountType,
-    List<DiscountRange>? discountRanges,
+    List<DiscountRange>? ranges,
   ) async {
     try {
       await _apiClient.patch('/$tableId', {
         'nickname': nickname,
         'discountType': discountType,
-        'discountRanges': discountRanges,
+        'ranges': ranges,
       });
     } catch (e) {
       throw Exception('Failed to save discount table: $e');

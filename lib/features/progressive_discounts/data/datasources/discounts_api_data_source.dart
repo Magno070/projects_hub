@@ -11,7 +11,7 @@ abstract class DiscountsApiDataSource {
     String tableId,
     String? nickname,
     String? discountType,
-    List<DiscountRange>? discountRanges,
+    List<DiscountRange>? ranges,
   );
 
   Future<void> deleteDiscountTable(String tableId);

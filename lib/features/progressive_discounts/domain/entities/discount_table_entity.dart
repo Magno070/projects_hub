@@ -4,13 +4,13 @@ class DiscountTableEntity {
   final String id;
   final String nickname;
   final String discountType;
-  final List<DiscountTableRangeEntity> discountRanges;
+  final List<DiscountTableRangeEntity> ranges;
 
   DiscountTableEntity({
     required this.id,
     required this.nickname,
     required this.discountType,
-    required this.discountRanges,
+    required this.ranges,
   });
 
   factory DiscountTableEntity.fromModel(DiscountsTableModel model) {
@@ -18,7 +18,7 @@ class DiscountTableEntity {
       id: model.id,
       nickname: model.nickname,
       discountType: model.discountType,
-      discountRanges: model.discountRanges
+      ranges: model.ranges
           .map((range) => DiscountTableRangeEntity.fromModel(range))
           .toList(),
     );
@@ -29,7 +29,7 @@ class DiscountTableEntity {
       id: id,
       nickname: nickname,
       discountType: discountType,
-      discountRanges: discountRanges.map((range) => range.toModel()).toList(),
+      ranges: ranges.map((range) => range.toModel()).toList(),
     );
   }
 
@@ -37,13 +37,13 @@ class DiscountTableEntity {
     String? id,
     String? nickname,
     String? discountType,
-    List<DiscountTableRangeEntity>? discountRanges,
+    List<DiscountTableRangeEntity>? ranges,
   }) {
     return DiscountTableEntity(
       id: id ?? this.id,
       nickname: nickname ?? this.nickname,
       discountType: discountType ?? this.discountType,
-      discountRanges: discountRanges ?? this.discountRanges,
+      ranges: ranges ?? this.ranges,
     );
   }
 }

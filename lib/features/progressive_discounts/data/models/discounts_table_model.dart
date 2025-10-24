@@ -2,13 +2,13 @@ class DiscountsTableModel {
   final String id;
   final String nickname;
   final String discountType;
-  final List<DiscountRange> discountRanges;
+  final List<DiscountRange> ranges;
 
   DiscountsTableModel({
     required this.id,
     required this.nickname,
     required this.discountType,
-    required this.discountRanges,
+    required this.ranges,
   });
 
   factory DiscountsTableModel.fromJson(Map<String, dynamic> json) {
@@ -16,7 +16,7 @@ class DiscountsTableModel {
       id: json['_id'],
       nickname: json['nickname'],
       discountType: json['discountType'],
-      discountRanges: (json['discountRanges'] as List)
+      ranges: (json['ranges'] as List)
           .map((rangeJson) => DiscountRange.fromJson(rangeJson))
           .toList(),
     );
@@ -27,7 +27,7 @@ class DiscountsTableModel {
       'id': id,
       'nickname': nickname,
       'discountType': discountType,
-      'discountRanges': discountRanges.map((range) => range.toJson()).toList(),
+      'ranges': ranges.map((range) => range.toJson()).toList(),
     };
   }
 }

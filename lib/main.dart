@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:projects_hub/features/progressive_discounts/presentation/pages/discounts_home.dart';
 
-void main() {
+import 'package:projects_hub/core/router/app_router.dart';
+import 'package:projects_hub/core/di/injection_container.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Configura as dependências
+  await configureDependencies();
+
   runApp(const MainApp());
 }
 
@@ -10,6 +17,10 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(home: DiscountsHome());
+    return MaterialApp.router(
+      title: 'Projects Hub',
+      theme: ThemeData(primarySwatch: Colors.blue),
+      routerConfig: AppRouter.router,
+    );
   }
 }

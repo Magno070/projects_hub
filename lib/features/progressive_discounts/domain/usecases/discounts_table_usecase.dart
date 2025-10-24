@@ -23,7 +23,7 @@ class UpdateDiscountNicknameUseCase {
       tableId,
       updatedEntity.nickname,
       updatedEntity.discountType,
-      updatedEntity.discountRanges,
+      updatedEntity.ranges,
     );
   }
 }

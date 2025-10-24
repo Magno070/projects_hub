@@ -11,6 +11,6 @@ abstract class DiscountTableRepository {
     String tableId,
     String? nickname,
     String? discountType,
-    List<DiscountTableRangeEntity>? discountRanges,
+    List<DiscountTableRangeEntity>? ranges,
   );
 }
