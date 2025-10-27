@@ -1,4 +1,3 @@
-// domain/usecases/update_nickname_usecase.dart
 import 'package:projects_hub/features/progressive_discounts/domain/entities/discount_table_entity.dart';
 import 'package:projects_hub/features/progressive_discounts/domain/repositories/discount_table_repository.dart';
 
@@ -37,28 +36,16 @@ class UpdateDiscountNicknameUseCase {
     required String tableId,
     required String newNickname,
   }) async {
-    print(
-      "UseCase: Starting updateNickname with tableId: $tableId, newNickname: $newNickname",
-    );
-
-    print("UseCase: Getting current entity...");
     final DiscountTableEntity currentEntity = await _repository
         .getDiscountTable(tableId);
-    print("UseCase: Current entity retrieved: ${currentEntity.nickname}");
 
     final DiscountTableEntity updatedEntity = currentEntity.copyWith(
       nickname: newNickname,
     );
-    print(
-      "UseCase: Created updated entity with nickname: ${updatedEntity.nickname}",
-    );
-
-    print("UseCase: Calling repository updateDiscountTable...");
     await _repository.updateDiscountTable(
       tableId: tableId,
       nickname: updatedEntity.nickname,
     );
-    print("UseCase: Repository updateDiscountTable completed successfully");
   }
 }
 
@@ -67,23 +54,33 @@ class SetNewBaseDiscountTableUseCase {
   SetNewBaseDiscountTableUseCase(this._repository);
 
   Future<void> call(String newBaseEntityId) async {
-    final DiscountTableEntity currentEntity = await _repository
-        .getBaseDiscountTable();
-
     final DiscountTableEntity newBaseEntity = await _repository
         .getDiscountTable(newBaseEntityId);
 
-    final List<Future<void>> futures = [
-      _repository.updateDiscountTable(
-        tableId: currentEntity.id,
-        discountType: 'personal',
-      ),
+    if (newBaseEntity.discountType == 'base') {
+      return;
+    }
 
+    final DiscountTableEntity? currentEntity = await _repository
+        .getBaseDiscountTable();
+
+    final List<Future<void>> futures = [];
+
+    if (currentEntity != null) {
+      futures.add(
+        _repository.updateDiscountTable(
+          tableId: currentEntity.id,
+          discountType: 'personal',
+        ),
+      );
+    }
+
+    futures.add(
       _repository.updateDiscountTable(
         tableId: newBaseEntity.id,
         discountType: 'base',
       ),
-    ];
+    );
 
     await Future.wait(futures);
   }

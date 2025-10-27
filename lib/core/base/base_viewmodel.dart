@@ -50,6 +50,7 @@ abstract class BaseViewModel extends ChangeNotifier {
       final result = await operation();
       return result;
     } catch (e) {
+      debugPrint('Erro em executeWithLoading: $e');
       setError(e.toString());
       return null;
     } finally {

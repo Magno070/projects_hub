@@ -74,10 +74,15 @@ class DiscountsApiDataSourceImpl implements DiscountsApiDataSource {
   Future<DiscountsTableModel> getBaseDiscountTable() async {
     try {
       final responseString = await _apiClient.get('/base');
+      final responseJson = jsonDecode(responseString);
+
+      if (responseJson['success'] == false) {
+        throw Exception('No base discount table found');
+      }
+
       final discountTable = DiscountsTableModel.fromJson(
-        jsonDecode(responseString),
+        responseJson["baseDiscountTable"],
       );
-      print("DataSource: Base discount table: $discountTable");
       return discountTable;
     } catch (e) {
       throw Exception('Failed to get base discount table: $e');

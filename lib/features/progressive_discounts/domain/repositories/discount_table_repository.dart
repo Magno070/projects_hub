@@ -11,7 +11,7 @@ abstract class DiscountTableRepository {
 
   Future<List<DiscountTableEntity>> getAllPersonalDiscountTables();
 
-  Future<DiscountTableEntity> getBaseDiscountTable();
+  Future<DiscountTableEntity?> getBaseDiscountTable();
 
   //Update
   Future<void> updateDiscountTable({

@@ -33,9 +33,13 @@ class DiscountTableRepositoryImpl implements DiscountTableRepository {
   }
 
   @override
-  Future<DiscountTableEntity> getBaseDiscountTable() async {
-    final model = await _dataSource.getBaseDiscountTable();
-    return DiscountTableEntity.fromModel(model);
+  Future<DiscountTableEntity?> getBaseDiscountTable() async {
+    try {
+      final model = await _dataSource.getBaseDiscountTable();
+      return DiscountTableEntity.fromModel(model);
+    } catch (e) {
+      return null;
+    }
   }
 
   @override
