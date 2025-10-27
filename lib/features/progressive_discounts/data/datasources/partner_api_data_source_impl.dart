@@ -41,14 +41,14 @@ class PartnerApiDataSourceImpl implements PartnerApiDataSource {
   }
 
   @override
-  Future<void> updatePartner(
-    String partnerId,
+  Future<void> updatePartner({
+    required String partnerId,
     String? name,
     String? discountType,
     double? dailyPrice,
     int? clientsAmount,
     String? discountsTableId,
-  ) async {
+  }) async {
     try {
       await _apiClient.patch('/$partnerId', {
         'name': name,

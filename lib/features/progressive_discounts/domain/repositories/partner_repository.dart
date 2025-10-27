@@ -7,14 +7,14 @@ abstract class PartnerRepository {
 
   Future<PartnerEntity> getPartner(String partnerId);
 
-  Future<void> updatePartner(
-    String partnerId,
+  Future<void> updatePartner({
+    required String partnerId,
     String? name,
     String? discountType,
     double? dailyPrice,
     int? clientsAmount,
     String? discountsTableId,
-  );
+  });
 
   Future<void> deletePartner(String partnerId);
 }

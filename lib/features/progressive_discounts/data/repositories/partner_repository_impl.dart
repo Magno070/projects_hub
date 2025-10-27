@@ -25,21 +25,21 @@ class PartnerRepositoryImpl implements PartnerRepository {
   }
 
   @override
-  Future<void> updatePartner(
-    String partnerId,
+  Future<void> updatePartner({
+    required String partnerId,
     String? name,
     String? discountType,
     double? dailyPrice,
     int? clientsAmount,
     String? discountsTableId,
-  ) async {
+  }) async {
     await _dataSource.updatePartner(
-      partnerId,
-      name,
-      discountType,
-      dailyPrice,
-      clientsAmount,
-      discountsTableId,
+      partnerId: partnerId,
+      name: name,
+      discountType: discountType,
+      dailyPrice: dailyPrice,
+      clientsAmount: clientsAmount,
+      discountsTableId: discountsTableId,
     );
   }
 

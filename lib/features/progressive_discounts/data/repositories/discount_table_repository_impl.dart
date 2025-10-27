@@ -27,17 +27,34 @@ class DiscountTableRepositoryImpl implements DiscountTableRepository {
   }
 
   @override
-  Future<void> updateDiscountTable(
-    String tableId,
+  Future<List<DiscountTableEntity>> getAllPersonalDiscountTables() async {
+    final models = await _dataSource.getAllPersonalDiscountTables();
+    return models.map((model) => DiscountTableEntity.fromModel(model)).toList();
+  }
+
+  @override
+  Future<DiscountTableEntity> getBaseDiscountTable() async {
+    final model = await _dataSource.getBaseDiscountTable();
+    return DiscountTableEntity.fromModel(model);
+  }
+
+  @override
+  Future<void> updateDiscountTable({
+    required String tableId,
     String? nickname,
     String? discountType,
     List<DiscountTableRangeEntity>? ranges,
-  ) async {
+  }) async {
     await _dataSource.updateDiscountTable(
-      tableId,
-      nickname,
-      discountType,
-      ranges?.map((range) => range.toModel()).toList(),
+      tableId: tableId,
+      nickname: nickname,
+      discountType: discountType,
+      ranges: ranges?.map((range) => range.toModel()).toList(),
     );
+  }
+
+  @override
+  Future<void> deleteDiscountTable(String tableId) async {
+    await _dataSource.deleteDiscountTable(tableId);
   }
 }

@@ -5,14 +5,14 @@ class TableCell extends StatelessWidget {
   final Color color;
   final Color borderColor;
   final bool isLast;
-  final bool isFirstRow;
+  final bool isHeader;
   const TableCell({
     super.key,
     required this.child,
     required this.color,
     this.borderColor = Colors.black,
     this.isLast = false,
-    this.isFirstRow = false,
+    this.isHeader = false,
   });
 
   @override
@@ -21,9 +21,9 @@ class TableCell extends StatelessWidget {
       decoration: BoxDecoration(
         color: color,
         border: Border(
-          top: isFirstRow ? BorderSide.none : BorderSide(color: borderColor),
+          top: BorderSide(color: borderColor),
           left: BorderSide(color: borderColor),
-          bottom: BorderSide(color: borderColor),
+          bottom: isHeader ? BorderSide.none : BorderSide(color: borderColor),
           right: isLast ? BorderSide(color: borderColor) : BorderSide.none,
         ),
       ),
@@ -38,7 +38,8 @@ class EditableTableCell extends StatefulWidget {
   final Color color;
   final Color borderColor;
   final bool isLast;
-  final bool isFirstRow;
+  final bool isHeader;
+  final bool isLastRow;
   final Function(String)? onValueChanged;
   const EditableTableCell({
     super.key,
@@ -46,8 +47,9 @@ class EditableTableCell extends StatefulWidget {
     required this.color,
     this.borderColor = Colors.black,
     this.isLast = false,
-    this.isFirstRow = false,
+    this.isHeader = false,
     this.onValueChanged,
+    this.isLastRow = false,
   });
 
   @override
@@ -98,11 +100,13 @@ class _EditableTableCellState extends State<EditableTableCell> {
         decoration: BoxDecoration(
           color: widget.color,
           border: Border(
-            top: widget.isFirstRow
+            top: widget.isHeader
                 ? BorderSide.none
                 : BorderSide(color: widget.borderColor),
             left: BorderSide(color: widget.borderColor),
-            bottom: BorderSide(color: widget.borderColor),
+            bottom: widget.isLastRow
+                ? BorderSide(color: widget.borderColor)
+                : BorderSide.none,
             right: widget.isLast
                 ? BorderSide(color: widget.borderColor)
                 : BorderSide.none,

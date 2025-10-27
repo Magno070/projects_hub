@@ -21,9 +21,11 @@ class DiscountsApiDataSourceImpl implements DiscountsApiDataSource {
   @override
   Future<List<DiscountsTableModel>> getAllDiscountTables() async {
     try {
-      final responseJson = await _apiClient.get('/all');
-      return (jsonDecode(responseJson) as List)
-          .map((json) => DiscountsTableModel.fromJson(json))
+      final responseString = await _apiClient.get('/all');
+      final discountTables =
+          (jsonDecode(responseString)["discountTables"] as List<dynamic>);
+      return discountTables
+          .map((e) => DiscountsTableModel.fromJson(e))
           .toList();
     } catch (e) {
       throw Exception('Failed to get all discount tables: $e');
@@ -42,15 +44,6 @@ class DiscountsApiDataSourceImpl implements DiscountsApiDataSource {
       if (success) {
         final discountTableData = responseJson['data']['discountTable'];
 
-        // Mapeia 'ranges' para 'discountRanges' para compatibilidade com o modelo
-        // final mappedData = {
-        //   '_id': discountTableData['_id'],
-        //   'nickname': discountTableData['nickname'],
-        //   'discountType': discountTableData['discountType'],
-        //   'discountRanges':
-        //       discountTableData['ranges'], // Mapeia 'ranges' para 'discountRanges'
-        // };
-
         return DiscountsTableModel.fromJson(discountTableData);
       } else {
         throw Exception(
@@ -63,14 +56,42 @@ class DiscountsApiDataSourceImpl implements DiscountsApiDataSource {
   }
 
   @override
-  Future<void> updateDiscountTable(
-    String tableId,
+  Future<List<DiscountsTableModel>> getAllPersonalDiscountTables() async {
+    try {
+      final responseString = await _apiClient.get('/personal');
+      final discountTables =
+          (jsonDecode(responseString)["discountTables"] as List<dynamic>);
+      return discountTables
+          .map((e) => DiscountsTableModel.fromJson(e))
+          .toList();
+    } catch (e) {
+      throw Exception('Failed to get all personal discount tables: $e');
+    }
+  }
+
+  @override
+  Future<DiscountsTableModel> getBaseDiscountTable() async {
+    try {
+      final responseString = await _apiClient.get('/base');
+      final discountTable = DiscountsTableModel.fromJson(
+        jsonDecode(responseString),
+      );
+      print("DataSource: Base discount table: $discountTable");
+      return discountTable;
+    } catch (e) {
+      throw Exception('Failed to get base discount table: $e');
+    }
+  }
+
+  @override
+  Future<void> updateDiscountTable({
+    required String tableId,
     String? nickname,
     String? discountType,
     List<DiscountRange>? ranges,
-  ) async {
+  }) async {
     try {
-      await _apiClient.patch('/$tableId', {
+      final response = await _apiClient.patch('/$tableId', {
         'nickname': nickname,
         'discountType': discountType,
         'ranges': ranges,

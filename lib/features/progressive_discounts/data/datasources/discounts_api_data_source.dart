@@ -7,12 +7,16 @@ abstract class DiscountsApiDataSource {
 
   Future<DiscountsTableModel> getDiscountTable(String tableId);
 
-  Future<void> updateDiscountTable(
-    String tableId,
+  Future<List<DiscountsTableModel>> getAllPersonalDiscountTables();
+
+  Future<DiscountsTableModel> getBaseDiscountTable();
+
+  Future<void> updateDiscountTable({
+    required String tableId,
     String? nickname,
     String? discountType,
     List<DiscountRange>? ranges,
-  );
+  });
 
   Future<void> deleteDiscountTable(String tableId);
 }

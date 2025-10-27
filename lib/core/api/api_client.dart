@@ -1,4 +1,5 @@
 import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class ApiClient {
   final String baseUrl;
@@ -16,7 +17,17 @@ class ApiClient {
   }
 
   Future<dynamic> patch(String path, dynamic body) async {
-    final response = await http.patch(Uri.parse('$baseUrl$path'), body: body);
+    print("ApiClient: Making PATCH request to: $baseUrl$path");
+    print("ApiClient: Request body: $body");
+
+    final response = await http.patch(
+      Uri.parse('$baseUrl$path'),
+      body: jsonEncode(body),
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    print("ApiClient: Response status: ${response.statusCode}");
+    print("ApiClient: Response body: ${response.body}");
     return response.body;
   }
 

@@ -7,14 +7,14 @@ abstract class PartnerApiDataSource {
 
   Future<PartnerModel> getPartner(String partnerId);
 
-  Future<void> updatePartner(
-    String partnerId,
+  Future<void> updatePartner({
+    required String partnerId,
     String? name,
     String? discountType,
     double? dailyPrice,
     int? clientsAmount,
-    String? discountTableId,
-  );
+    String? discountsTableId,
+  });
 
   Future<void> deletePartner(String partnerId);
 }
