@@ -11,7 +11,8 @@ class DiscountsApiDataSourceImpl implements DiscountsApiDataSource {
   @override
   Future<void> createDiscountTable(DiscountsTableModel model) async {
     try {
-      final data = model.toJson();
+      // Usa toJsonForCreation() para não enviar o campo 'id' na criação
+      final data = model.toJsonForCreation();
       await _apiClient.post('/', data);
     } catch (e) {
       throw Exception('Failed to create discount table: $e');
