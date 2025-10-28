@@ -36,4 +36,14 @@ class PartnerModel {
       'discountsTableId': discountsTableId,
     };
   }
+
+  Map<String, dynamic> toJsonForCreation() {
+    return {
+      'name': name,
+      'discountType': discountType,
+      'dailyPrice': dailyPrice,
+      'clientsAmount': clientsAmount,
+      'discountsTableId': discountsTableId,
+    };
+  }
 }

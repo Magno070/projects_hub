@@ -3,6 +3,52 @@ import 'package:projects_hub/features/progressive_discounts/domain/entities/part
 import 'package:projects_hub/features/progressive_discounts/domain/repositories/discount_table_repository.dart';
 import 'package:projects_hub/features/progressive_discounts/domain/repositories/partner_repository.dart';
 
+class CreatePartnerUseCase {
+  final PartnerRepository _partnerRepository;
+  final DiscountTableRepository _discountTableRepository;
+
+  CreatePartnerUseCase(this._partnerRepository, this._discountTableRepository);
+
+  Future<void> call({
+    required String name,
+    required double dailyPrice,
+    required int clientsAmount,
+    required String discountsTableId,
+  }) async {
+    if (name.isEmpty) {
+      throw ArgumentError('O nome não pode estar vazio.');
+    }
+    if (dailyPrice <= 0) {
+      throw ArgumentError('O preço diário deve ser maior que zero.');
+    }
+    if (clientsAmount < 0) {
+      throw ArgumentError('A quantidade de clientes não pode ser negativa.');
+    }
+    if (discountsTableId.isEmpty) {
+      throw ArgumentError('Uma tabela de desconto deve ser selecionada.');
+    }
+
+    final DiscountTableEntity? table = await _discountTableRepository
+        .getDiscountTable(discountsTableId);
+
+    if (table == null) {
+      throw Exception('Tabela de desconto não encontrada.');
+    }
+
+    final PartnerEntity newEntity = PartnerEntity(
+      // O toJsonForCreation() irá removê-lo antes de enviar
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      name: name,
+      discountType: table.discountType,
+      dailyPrice: dailyPrice,
+      clientsAmount: clientsAmount,
+      discountsTableId: discountsTableId,
+    );
+
+    await _partnerRepository.createPartner(newEntity);
+  }
+}
+
 class UpdatePartnerClientsAmountUseCase {
   final PartnerRepository _repository;
 

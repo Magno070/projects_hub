@@ -11,7 +11,7 @@ class PartnerApiDataSourceImpl implements PartnerApiDataSource {
   @override
   Future<void> createPartner(PartnerModel model) async {
     try {
-      final data = model.toJson();
+      final data = model.toJsonForCreation();
       await _apiClient.post('/', data);
     } catch (e) {
       throw Exception('Failed to create partner: $e');

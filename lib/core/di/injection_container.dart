@@ -82,6 +82,13 @@ Future<void> configureDependencies() async {
     () => DeletePartnerUseCase(getIt<PartnerRepository>()),
   );
 
+  getIt.registerLazySingleton<CreatePartnerUseCase>(
+    () => CreatePartnerUseCase(
+      getIt<PartnerRepository>(),
+      getIt<DiscountTableRepository>(),
+    ),
+  );
+
   // ViewModels
   getIt.registerFactory<ProgressiveDiscountsViewModel>(
     () => ProgressiveDiscountsViewModel(
@@ -103,6 +110,7 @@ Future<void> configureDependencies() async {
       getIt<UpdatePartnerDailyPriceUseCase>(),
       getIt<UpdatePartnerDiscountsTableUseCase>(),
       getIt<DeletePartnerUseCase>(),
+      getIt<CreatePartnerUseCase>(),
     ),
   );
 }

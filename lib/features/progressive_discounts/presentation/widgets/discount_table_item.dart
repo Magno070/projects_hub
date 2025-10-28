@@ -102,7 +102,7 @@ class DiscountTableItem extends StatelessWidget {
       ..sort((a, b) => a.initialRange.compareTo(b.initialRange));
 
     return Container(
-      padding: const EdgeInsets.all(32.0),
+      padding: const EdgeInsets.all(28.0),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(10),
@@ -114,69 +114,77 @@ class DiscountTableItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Header com informações da tabela
-          Container(
-            padding: const EdgeInsets.all(12.0),
-            decoration: BoxDecoration(
-              color: Theme.of(
-                context,
-              ).colorScheme.primaryContainer.withOpacity(0.3),
-              borderRadius: BorderRadius.circular(8.0),
-              border: Border.all(
-                color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
-                width: 1.0,
-              ),
-            ),
-            child: Row(
-              children: [
-                Icon(
-                  Icons.table_chart,
-                  color: Theme.of(context).colorScheme.primary,
-                  size: 20.0,
-                ),
-                const SizedBox(width: 8.0),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Tipo de Desconto',
-                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Text(
-                        table.discountType,
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8.0,
-                    vertical: 4.0,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primary,
-                    borderRadius: BorderRadius.circular(12.0),
-                  ),
-                  child: Text(
-                    '${ranges.length} faixas',
-                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                      color: Theme.of(context).colorScheme.onPrimary,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          const SizedBox(height: 16.0),
+          // Container(
+          //   padding: const EdgeInsets.all(12.0),
+          //   decoration: BoxDecoration(
+          //     color: Theme.of(
+          //       context,
+          //     ).colorScheme.primaryContainer.withOpacity(0.3),
+          //     borderRadius: BorderRadius.circular(8.0),
+          //     border: Border.all(
+          //       color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
+          //       width: 1.0,
+          //     ),
+          //   ),
+          //   child: Row(
+          //     children: [
+          //       Icon(
+          //         Icons.table_chart,
+          //         color: Theme.of(context).colorScheme.primary,
+          //         size: 20.0,
+          //       ),
+          //       const SizedBox(width: 8.0),
+          //       Expanded(
+          //         child: Column(
+          //           crossAxisAlignment: CrossAxisAlignment.start,
+          //           children: [
+          //             Text(
+          //               'Tipo de Desconto',
+          //               style: Theme.of(context).textTheme.labelSmall?.copyWith(
+          //                 color: Theme.of(context).colorScheme.onSurfaceVariant,
+          //                 fontWeight: FontWeight.w500,
+          //               ),
+          //             ),
+          //             Text(
+          //               (() {
+          //                 switch (table.discountType) {
+          //                   case "base":
+          //                     return "Base";
+          //                   case "personal":
+          //                     return "Personalizada";
+          //                   default:
+          //                     return "";
+          //                 }
+          //               })(),
+          //               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+          //                 fontWeight: FontWeight.bold,
+          //                 color: Theme.of(context).colorScheme.primary,
+          //               ),
+          //             ),
+          //           ],
+          //         ),
+          //       ),
+          //       Container(
+          //         padding: const EdgeInsets.symmetric(
+          //           horizontal: 8.0,
+          //           vertical: 4.0,
+          //         ),
+          //         decoration: BoxDecoration(
+          //           color: Theme.of(context).colorScheme.primary,
+          //           borderRadius: BorderRadius.circular(12.0),
+          //         ),
+          //         child: Text(
+          //           '${ranges.length} faixas',
+          //           style: Theme.of(context).textTheme.labelSmall?.copyWith(
+          //             color: Theme.of(context).colorScheme.onPrimary,
+          //             fontWeight: FontWeight.bold,
+          //           ),
+          //         ),
+          //       ),
+          //     ],
+          //   ),
+          // ),
+          // const SizedBox(height: 16.0),
 
           // Título das faixas
           Row(

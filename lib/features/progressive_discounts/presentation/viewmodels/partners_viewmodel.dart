@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:projects_hub/core/base/base_viewmodel.dart';
 import 'package:projects_hub/features/progressive_discounts/domain/entities/discount_table_entity.dart';
 import 'package:projects_hub/features/progressive_discounts/domain/entities/partner_entity.dart';
@@ -11,6 +12,7 @@ class PartnersViewModel extends BaseViewModel {
   final UpdatePartnerDailyPriceUseCase _updateDailyPriceUseCase;
   final UpdatePartnerDiscountsTableUseCase _updateTableUseCase;
   final DeletePartnerUseCase _deletePartnerUseCase;
+  final CreatePartnerUseCase _createPartnerUseCase;
 
   PartnersViewModel(
     this._getAllPartnersUseCase,
@@ -19,6 +21,7 @@ class PartnersViewModel extends BaseViewModel {
     this._updateDailyPriceUseCase,
     this._updateTableUseCase,
     this._deletePartnerUseCase,
+    this._createPartnerUseCase,
   );
 
   List<PartnerEntity> _partners = [];
@@ -49,6 +52,32 @@ class PartnersViewModel extends BaseViewModel {
     });
   }
 
+  Future<bool> createPartner({
+    required String name,
+    required double dailyPrice,
+    required int clientsAmount,
+    required String discountsTableId,
+  }) async {
+    try {
+      final success = await executeWithLoading(() async {
+        await _createPartnerUseCase.call(
+          name: name,
+          dailyPrice: dailyPrice,
+          clientsAmount: clientsAmount,
+          discountsTableId: discountsTableId,
+        );
+      });
+
+      await loadData();
+
+      return true;
+    } catch (e) {
+      debugPrint("Erro ao criar parceiro: $e");
+      setError(e.toString());
+      return false;
+    }
+  }
+
   Future<void> updateClientsAmount(String partnerId, int clientsAmount) async {
     // Não executa com loading para uma atualização mais suave
     try {
@@ -62,6 +91,7 @@ class PartnersViewModel extends BaseViewModel {
         notifyListeners();
       }
     } catch (e) {
+      debugPrint("Erro ao atualizar quantidade de clientes: $e");
       setError(e.toString());
       loadData(); // Recarrega em caso de erro
     }
@@ -77,6 +107,7 @@ class PartnersViewModel extends BaseViewModel {
         notifyListeners();
       }
     } catch (e) {
+      debugPrint("Erro ao atualizar preço diário: $e");
       setError(e.toString());
       loadData(); // Recarrega em caso de erro
     }

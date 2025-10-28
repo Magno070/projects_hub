@@ -202,7 +202,9 @@ class _PartnerItemState extends State<PartnerItem> {
       items: widget.allTables.map((table) {
         return DropdownMenuItem<String>(
           value: table.id,
-          child: Text('${table.nickname} (${table.discountType})'),
+          child: Text(
+            '${table.nickname} (${table.discountType == "base" ? "Tabela de descontos geral" : "Personalizada"})',
+          ),
         );
       }).toList(),
       onChanged: (value) {
