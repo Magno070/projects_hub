@@ -21,9 +21,11 @@ class ProgressiveDiscountsViewModel extends BaseViewModel {
 
   DiscountTableEntity? _baseDiscountTable;
   List<DiscountTableEntity> _customDiscountTables = [];
+  bool _sortByDiscount = false;
 
   DiscountTableEntity? get baseDiscountTable => _baseDiscountTable;
   List<DiscountTableEntity> get customDiscountTables => _customDiscountTables;
+  bool get sortByDiscount => _sortByDiscount;
 
   List<DiscountTableEntity> get discountTables => _allDiscountTables;
 
@@ -47,43 +49,49 @@ class ProgressiveDiscountsViewModel extends BaseViewModel {
   }
 
   Future<void> updateNickname(String id, String nickname) async {
-    final result = await executeWithLoading(() async {
+    await executeWithLoading(() async {
       await _updateNicknameUseCase.call(tableId: id, newNickname: nickname);
     });
 
-    if (result != null) {
+    if (errorMessage == null) {
       loadDiscountTables();
     }
   }
 
   Future<void> cloneTable(String id) async {
-    final result = await executeWithLoading(() async {
+    await executeWithLoading(() async {
+      // Removido 'final result ='
       await _cloneTableUseCase.call(id);
     });
 
-    if (result != null) {
+    if (errorMessage == null) {
+      // Alterado de 'result != null'
       // Sucesso - recarrega a lista
       loadDiscountTables();
     }
   }
 
   Future<void> deleteTable(String id) async {
-    final result = await executeWithLoading(() async {
+    await executeWithLoading(() async {
+      // Removido 'final result ='
       await _deleteTableUseCase.call(id);
     });
 
-    if (result != null) {
+    if (errorMessage == null) {
+      // Alterado de 'result != null'
       // Sucesso - recarrega a lista
       loadDiscountTables();
     }
   }
 
   Future<void> setAsBase(String id) async {
-    final result = await executeWithLoading(() async {
+    await executeWithLoading(() async {
+      // Removido 'final result ='
       await _setAsBaseUseCase.call(id);
     });
 
-    if (result != null) {
+    if (errorMessage == null) {
+      // Alterado de 'result != null'
       // Sucesso - recarrega a lista
       loadDiscountTables();
     }

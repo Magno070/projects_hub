@@ -10,14 +10,9 @@ dependencies:
   flutter:
     sdk: flutter
   http: ^1.5.0
-  provider: ^6.1.5+1
-  # MVVM e State Management
-  flutter_riverpod: ^2.4.9
-  # Utilitários
-  equatable: ^2.0.5
   # Dependency Injection
   get_it: ^7.6.4
-  injectable: ^2.3.2
+  # injectable: ^2.3.2
   go_router: ^16.3.0
 
 dev_dependencies:
