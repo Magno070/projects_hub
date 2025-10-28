@@ -17,33 +17,19 @@ class ProgressiveDiscountsViewModel extends BaseViewModel {
     this._setAsBaseUseCase,
   );
 
-  List<DiscountTableEntity> _allDiscountTables = [];
-
   DiscountTableEntity? _baseDiscountTable;
   List<DiscountTableEntity> _customDiscountTables = [];
-  bool _sortByDiscount = false;
 
   DiscountTableEntity? get baseDiscountTable => _baseDiscountTable;
   List<DiscountTableEntity> get customDiscountTables => _customDiscountTables;
-  bool get sortByDiscount => _sortByDiscount;
-
-  List<DiscountTableEntity> get discountTables => _allDiscountTables;
 
   Future<void> loadDiscountTables() async {
     await executeWithLoading(() async {
-      _allDiscountTables = await _getAllTablesUseCase.call();
+      final SplitDiscountTables splitTables = await _getAllTablesUseCase.call();
 
-      try {
-        _baseDiscountTable = _allDiscountTables.firstWhere(
-          (table) => table.discountType == 'base',
-        );
-      } catch (e) {
-        _baseDiscountTable = null;
-      }
+      _baseDiscountTable = splitTables.baseDiscountTable;
+      _customDiscountTables = splitTables.customDiscountTables;
 
-      _customDiscountTables = _allDiscountTables
-          .where((table) => table.discountType == 'personal')
-          .toList();
       notifyListeners();
     });
   }
@@ -60,39 +46,30 @@ class ProgressiveDiscountsViewModel extends BaseViewModel {
 
   Future<void> cloneTable(String id) async {
     await executeWithLoading(() async {
-      // Removido 'final result ='
       await _cloneTableUseCase.call(id);
     });
 
     if (errorMessage == null) {
-      // Alterado de 'result != null'
-      // Sucesso - recarrega a lista
       loadDiscountTables();
     }
   }
 
   Future<void> deleteTable(String id) async {
     await executeWithLoading(() async {
-      // Removido 'final result ='
       await _deleteTableUseCase.call(id);
     });
 
     if (errorMessage == null) {
-      // Alterado de 'result != null'
-      // Sucesso - recarrega a lista
       loadDiscountTables();
     }
   }
 
   Future<void> setAsBase(String id) async {
     await executeWithLoading(() async {
-      // Removido 'final result ='
       await _setAsBaseUseCase.call(id);
     });
 
     if (errorMessage == null) {
-      // Alterado de 'result != null'
-      // Sucesso - recarrega a lista
       loadDiscountTables();
     }
   }

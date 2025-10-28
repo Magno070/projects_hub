@@ -13,26 +13,6 @@ class DiscountTableEntity {
     required this.ranges,
   });
 
-  factory DiscountTableEntity.fromModel(DiscountsTableModel model) {
-    return DiscountTableEntity(
-      id: model.id,
-      nickname: model.nickname,
-      discountType: model.discountType,
-      ranges: model.ranges
-          .map((range) => DiscountTableRangeEntity.fromModel(range))
-          .toList(),
-    );
-  }
-
-  DiscountsTableModel toModel() {
-    return DiscountsTableModel(
-      id: id,
-      nickname: nickname,
-      discountType: discountType,
-      ranges: ranges.map((range) => range.toModel()).toList(),
-    );
-  }
-
   DiscountTableEntity copyWith({
     String? id,
     String? nickname,
@@ -58,22 +38,6 @@ class DiscountTableRangeEntity {
     required this.finalRange,
     required this.discount,
   });
-
-  factory DiscountTableRangeEntity.fromModel(DiscountRange model) {
-    return DiscountTableRangeEntity(
-      initialRange: model.initialRange,
-      finalRange: model.finalRange,
-      discount: model.discount,
-    );
-  }
-
-  DiscountRange toModel() {
-    return DiscountRange(
-      initialRange: initialRange,
-      finalRange: finalRange,
-      discount: discount,
-    );
-  }
 
   DiscountTableRangeEntity copyWith({
     int? initialRange,

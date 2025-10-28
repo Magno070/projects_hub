@@ -1,6 +1,16 @@
 import 'package:projects_hub/features/progressive_discounts/domain/entities/discount_table_entity.dart';
 import 'package:projects_hub/features/progressive_discounts/domain/repositories/discount_table_repository.dart';
 
+class SplitDiscountTables {
+  final DiscountTableEntity? baseDiscountTable;
+  final List<DiscountTableEntity> customDiscountTables;
+
+  SplitDiscountTables({
+    this.baseDiscountTable,
+    required this.customDiscountTables,
+  });
+}
+
 class CloneDiscountTableUseCase {
   final DiscountTableRepository _repository;
 
@@ -91,8 +101,24 @@ class GetAllDiscountTablesUseCase {
 
   GetAllDiscountTablesUseCase(this._repository);
 
-  Future<List<DiscountTableEntity>> call() async {
-    return await _repository.getAllDiscountTables();
+  Future<SplitDiscountTables> call() async {
+    final allTables = await _repository.getAllDiscountTables();
+
+    DiscountTableEntity? baseTable;
+    try {
+      baseTable = allTables.firstWhere((table) => table.discountType == 'base');
+    } catch (e) {
+      baseTable = null;
+    }
+
+    final customTables = allTables
+        .where((table) => table.discountType == 'personal')
+        .toList();
+
+    return SplitDiscountTables(
+      baseDiscountTable: baseTable,
+      customDiscountTables: customTables,
+    );
   }
 }
 
