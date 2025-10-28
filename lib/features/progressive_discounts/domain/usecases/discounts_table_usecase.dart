@@ -17,8 +17,13 @@ class CloneDiscountTableUseCase {
   CloneDiscountTableUseCase(this._repository);
 
   Future<void> call(String tableId) async {
-    final DiscountTableEntity currentEntity = await _repository
+    final DiscountTableEntity? currentEntity = await _repository
         .getDiscountTable(tableId);
+
+    if (currentEntity == null) {
+      throw Exception('Discount table not found');
+    }
+
     final DiscountTableEntity newEntity = currentEntity.copyWith(
       nickname: '${currentEntity.nickname} (Clone)',
       discountType: "personal",
@@ -46,8 +51,12 @@ class UpdateDiscountNicknameUseCase {
     required String tableId,
     required String newNickname,
   }) async {
-    final DiscountTableEntity currentEntity = await _repository
+    final DiscountTableEntity? currentEntity = await _repository
         .getDiscountTable(tableId);
+
+    if (currentEntity == null) {
+      throw Exception('Discount table not found');
+    }
 
     final DiscountTableEntity updatedEntity = currentEntity.copyWith(
       nickname: newNickname,
@@ -64,8 +73,12 @@ class SetNewBaseDiscountTableUseCase {
   SetNewBaseDiscountTableUseCase(this._repository);
 
   Future<void> call(String newBaseEntityId) async {
-    final DiscountTableEntity newBaseEntity = await _repository
+    final DiscountTableEntity? newBaseEntity = await _repository
         .getDiscountTable(newBaseEntityId);
+
+    if (newBaseEntity == null) {
+      throw Exception('Discount table not found');
+    }
 
     if (newBaseEntity.discountType == 'base') {
       return;
@@ -128,7 +141,13 @@ class GetDiscountTableUseCase {
   GetDiscountTableUseCase(this._repository);
 
   Future<DiscountTableEntity> call(String tableId) async {
-    return await _repository.getDiscountTable(tableId);
+    final DiscountTableEntity? table = await _repository.getDiscountTable(
+      tableId,
+    );
+    if (table == null) {
+      throw Exception('Discount table not found');
+    }
+    return table;
   }
 }
 
@@ -138,8 +157,12 @@ class VerifyDiscountTableRangesUseCase {
   VerifyDiscountTableRangesUseCase(this._repository);
 
   Future<void> call(String tableId) async {
-    final DiscountTableEntity currentEntity = await _repository
+    final DiscountTableEntity? currentEntity = await _repository
         .getDiscountTable(tableId);
+
+    if (currentEntity == null) {
+      throw Exception('Discount table not found');
+    }
 
     final List<DiscountTableRangeEntity> ranges = currentEntity.ranges;
 

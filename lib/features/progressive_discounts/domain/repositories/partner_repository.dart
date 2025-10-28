@@ -5,7 +5,7 @@ abstract class PartnerRepository {
 
   Future<List<PartnerEntity>> getAllPartners();
 
-  Future<PartnerEntity> getPartner(String partnerId);
+  Future<PartnerEntity?> getPartner(String partnerId);
 
   Future<void> updatePartner({
     required String partnerId,

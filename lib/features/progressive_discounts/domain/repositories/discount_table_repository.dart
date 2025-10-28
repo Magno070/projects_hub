@@ -7,7 +7,7 @@ abstract class DiscountTableRepository {
   //Read
   Future<List<DiscountTableEntity>> getAllDiscountTables();
 
-  Future<DiscountTableEntity> getDiscountTable(String tableId);
+  Future<DiscountTableEntity?> getDiscountTable(String tableId);
 
   Future<List<DiscountTableEntity>> getAllPersonalDiscountTables();
 

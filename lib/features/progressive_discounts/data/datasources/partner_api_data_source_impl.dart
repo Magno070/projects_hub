@@ -6,7 +6,7 @@ import 'package:projects_hub/features/progressive_discounts/data/datasources/par
 import 'package:projects_hub/features/progressive_discounts/data/models/partner_model.dart';
 
 class PartnerApiDataSourceImpl implements PartnerApiDataSource {
-  final ApiClient _apiClient = ApiClient(baseUrl: ApiConstants.partners);
+  final ApiClient _apiClient = ApiClient(baseUrl: ApiConstants.partner);
 
   @override
   Future<void> createPartner(PartnerModel model) async {
@@ -22,7 +22,16 @@ class PartnerApiDataSourceImpl implements PartnerApiDataSource {
   Future<List<PartnerModel>> getAllPartners() async {
     try {
       final responseJson = await _apiClient.get('/all');
-      return (jsonDecode(responseJson) as List)
+      final response = jsonDecode(responseJson);
+
+      if (response['success'] == false) {
+        return [];
+      }
+
+      if (response['partners'] == null) {
+        return [];
+      }
+      return (response['partners'] as List)
           .map((json) => PartnerModel.fromJson(json))
           .toList();
     } catch (e) {
@@ -31,10 +40,17 @@ class PartnerApiDataSourceImpl implements PartnerApiDataSource {
   }
 
   @override
-  Future<PartnerModel> getPartner(String partnerId) async {
+  Future<PartnerModel?> getPartner(String partnerId) async {
     try {
       final responseJson = await _apiClient.get('/$partnerId');
-      return PartnerModel.fromJson(jsonDecode(responseJson));
+      final response = jsonDecode(responseJson);
+      if (response['success'] == false) {
+        return null;
+      }
+      if (response['partner'] == null) {
+        return null;
+      }
+      return PartnerModel.fromJson(response['partner']);
     } catch (e) {
       throw Exception('Failed to get partner: $e');
     }

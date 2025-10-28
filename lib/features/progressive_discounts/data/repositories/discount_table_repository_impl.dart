@@ -54,22 +54,26 @@ class DiscountTableRepositoryImpl implements DiscountTableRepository {
   }
 
   @override
-  Future<DiscountTableEntity> getDiscountTable(String tableId) async {
-    final model = await _dataSource.getDiscountTable(tableId);
-    return DiscountTableEntity(
-      id: model.id,
-      nickname: model.nickname,
-      discountType: model.discountType,
-      ranges: model.ranges
-          .map(
-            (range) => DiscountTableRangeEntity(
-              initialRange: range.initialRange,
-              finalRange: range.finalRange,
-              discount: range.discount,
-            ),
-          )
-          .toList(),
-    );
+  Future<DiscountTableEntity?> getDiscountTable(String tableId) async {
+    try {
+      final discountsTableModel = await _dataSource.getDiscountTable(tableId);
+      return DiscountTableEntity(
+        id: discountsTableModel.id,
+        nickname: discountsTableModel.nickname,
+        discountType: discountsTableModel.discountType,
+        ranges: discountsTableModel.ranges
+            .map(
+              (range) => DiscountTableRangeEntity(
+                initialRange: range.initialRange,
+                finalRange: range.finalRange,
+                discount: range.discount,
+              ),
+            )
+            .toList(),
+      );
+    } catch (e) {
+      return null;
+    }
   }
 
   @override

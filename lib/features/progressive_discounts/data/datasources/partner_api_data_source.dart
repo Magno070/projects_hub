@@ -5,7 +5,7 @@ abstract class PartnerApiDataSource {
 
   Future<List<PartnerModel>> getAllPartners();
 
-  Future<PartnerModel> getPartner(String partnerId);
+  Future<PartnerModel?> getPartner(String partnerId);
 
   Future<void> updatePartner({
     required String partnerId,

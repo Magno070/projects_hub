@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:projects_hub/features/progressive_discounts/presentation/pages/partners_view.dart';
+import 'package:projects_hub/features/progressive_discounts/presentation/viewmodels/partners_viewmodel.dart';
 import 'package:provider/provider.dart';
 
 import 'package:projects_hub/core/di/injection_container.dart';
@@ -43,7 +45,10 @@ class AppRouter {
           GoRoute(
             path: 'view-partners',
             builder: (BuildContext context, GoRouterState state) {
-              return const Placeholder();
+              return ChangeNotifierProvider<PartnersViewModel>(
+                create: (context) => get<PartnersViewModel>(),
+                child: const PartnersView(),
+              );
             },
           ),
         ],

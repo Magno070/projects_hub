@@ -9,7 +9,12 @@ class UpdatePartnerClientsAmountUseCase {
   UpdatePartnerClientsAmountUseCase(this._repository);
 
   Future<void> call(String partnerId, int clientsAmount) async {
-    final PartnerEntity currentEntity = await _repository.getPartner(partnerId);
+    final PartnerEntity? currentEntity = await _repository.getPartner(
+      partnerId,
+    );
+    if (currentEntity == null) {
+      throw Exception('Partner not found');
+    }
     final PartnerEntity updatedEntity = currentEntity.copyWith(
       clientsAmount: clientsAmount,
     );
@@ -32,7 +37,12 @@ class UpdatePartnerDailyPriceUseCase {
       );
     }
 
-    final PartnerEntity currentEntity = await _repository.getPartner(partnerId);
+    final PartnerEntity? currentEntity = await _repository.getPartner(
+      partnerId,
+    );
+    if (currentEntity == null) {
+      throw Exception('Partner not found');
+    }
 
     final PartnerEntity updatedEntity = currentEntity.copyWith(
       dailyPrice: dailyPrice,
@@ -55,10 +65,19 @@ class UpdatePartnerDiscountsTableUseCase {
   );
 
   Future<void> call(String partnerId, String discountsTableId) async {
-    final PartnerEntity currentEntity = await _repository.getPartner(partnerId);
+    final PartnerEntity? currentEntity = await _repository.getPartner(
+      partnerId,
+    );
+    if (currentEntity == null) {
+      throw Exception('Partner not found');
+    }
 
-    final DiscountTableEntity discountsTableEntity =
+    final DiscountTableEntity? discountsTableEntity =
         await _discountTableRepository.getDiscountTable(discountsTableId);
+
+    if (discountsTableEntity == null) {
+      throw Exception('Discount table not found');
+    }
 
     final PartnerEntity updatedEntity = currentEntity.copyWith(
       discountsTableId: discountsTableId,
@@ -69,5 +88,25 @@ class UpdatePartnerDiscountsTableUseCase {
       discountsTableId: updatedEntity.discountsTableId,
       discountType: updatedEntity.discountType,
     );
+  }
+}
+
+class GetAllPartnersUseCase {
+  final PartnerRepository _repository;
+
+  GetAllPartnersUseCase(this._repository);
+
+  Future<List<PartnerEntity>> call() async {
+    return await _repository.getAllPartners();
+  }
+}
+
+class DeletePartnerUseCase {
+  final PartnerRepository _repository;
+
+  DeletePartnerUseCase(this._repository);
+
+  Future<void> call(String partnerId) async {
+    await _repository.deletePartner(partnerId);
   }
 }

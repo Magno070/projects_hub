@@ -19,8 +19,11 @@ class PartnerRepositoryImpl implements PartnerRepository {
   }
 
   @override
-  Future<PartnerEntity> getPartner(String partnerId) async {
+  Future<PartnerEntity?> getPartner(String partnerId) async {
     final model = await _dataSource.getPartner(partnerId);
+    if (model == null) {
+      throw Exception('Partner not found');
+    }
     return PartnerEntity.fromModel(model);
   }
 
