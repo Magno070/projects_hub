@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:projects_hub/features/progressive_discounts/presentation/pages/partner_info_page.dart';
 import 'package:projects_hub/features/progressive_discounts/presentation/pages/partners_view.dart';
 import 'package:projects_hub/features/progressive_discounts/presentation/viewmodels/partners_viewmodel.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +18,8 @@ class AppRoutes {
       '$progressiveDiscounts/view-tables';
   static const String progressiveDiscountsViewPartners =
       '$progressiveDiscounts/view-partners';
+  static const String progressiveDiscountsViewPartnerInfo =
+      '$progressiveDiscounts/view-partners/info/:partnerId';
 }
 
 class AppRouter {
@@ -32,6 +35,9 @@ class AppRouter {
 
       GoRoute(
         path: AppRoutes.progressiveDiscounts,
+        builder: (BuildContext context, GoRouterState state) {
+          return const ProgressiveDiscountsPage();
+        },
         routes: [
           GoRoute(
             path: 'view-tables',
@@ -50,11 +56,21 @@ class AppRouter {
                 child: const PartnersView(),
               );
             },
+            routes: [
+              GoRoute(
+                path: 'info/:partnerId',
+                builder: (BuildContext context, GoRouterState state) {
+                  return ChangeNotifierProvider<PartnersViewModel>(
+                    create: (context) => get<PartnersViewModel>(),
+                    child: PartnerInfoPage(
+                      partnerId: state.pathParameters['partnerId']!,
+                    ),
+                  );
+                },
+              ),
+            ],
           ),
         ],
-        builder: (BuildContext context, GoRouterState state) {
-          return const ProgressiveDiscountsPage();
-        },
       ),
     ],
   );

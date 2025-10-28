@@ -49,6 +49,15 @@ class CreatePartnerUseCase {
   }
 }
 
+class GetPartnerUseCase {
+  final PartnerRepository _repository;
+  const GetPartnerUseCase(this._repository);
+
+  Future<PartnerEntity?> call(String partnerId) async {
+    return await _repository.getPartner(partnerId);
+  }
+}
+
 class UpdatePartnerClientsAmountUseCase {
   final PartnerRepository _repository;
 

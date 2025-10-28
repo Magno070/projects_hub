@@ -5,12 +5,14 @@ import 'package:projects_hub/features/progressive_discounts/presentation/viewmod
 class DiscountTableItem extends StatelessWidget {
   final DiscountTableEntity table;
   final ProgressiveDiscountsViewModel viewModel;
+  final bool isSelected;
   final bool isBaseTable;
 
   const DiscountTableItem({
     super.key,
     required this.table,
     required this.viewModel,
+    required this.isSelected,
     this.isBaseTable = false,
   });
 
@@ -57,38 +59,68 @@ class DiscountTableItem extends StatelessWidget {
         ),
       ),
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      child: ExpansionTile(
-        title: Text(table.nickname),
-        trailing: PopupMenuButton<String>(
-          onSelected: (value) {
-            switch (value) {
-              case 'edit':
-                _showEditNicknameDialog(context);
-                break;
-              case 'clone':
-                viewModel.cloneTable(table.id);
-                break;
-              case 'set_as_base':
-                viewModel.setAsBase(table.id);
-                break;
-              case 'delete':
-                viewModel.deleteTable(table.id);
-                break;
-            }
-          },
-          itemBuilder: (context) => [
-            const PopupMenuItem(value: 'edit', child: Text('Editar Nome')),
-            const PopupMenuItem(value: 'clone', child: Text('Clonar')),
-            if (!isBaseTable)
-              const PopupMenuItem(
-                value: 'set_as_base',
-                child: Text('Definir como Base'),
-              ),
-            if (!isBaseTable)
-              const PopupMenuItem(value: 'delete', child: Text('Excluir')),
-          ],
-        ),
-        children: [_buildRangesList(context, table.ranges)],
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ListTile(
+            title: Text(table.nickname),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                PopupMenuButton<String>(
+                  onSelected: (value) {
+                    switch (value) {
+                      case 'edit':
+                        _showEditNicknameDialog(context);
+                        break;
+                      case 'clone':
+                        viewModel.cloneTable(table.id);
+                        break;
+                      case 'set_as_base':
+                        viewModel.setAsBase(table.id);
+                        break;
+                      case 'delete':
+                        viewModel.deleteTable(table.id);
+                        break;
+                    }
+                  },
+                  itemBuilder: (context) => [
+                    const PopupMenuItem(
+                      value: 'edit',
+                      child: Text('Editar Nome'),
+                    ),
+                    const PopupMenuItem(value: 'clone', child: Text('Clonar')),
+                    if (!isBaseTable)
+                      const PopupMenuItem(
+                        value: 'set_as_base',
+                        child: Text('Definir como Base'),
+                      ),
+                    if (!isBaseTable)
+                      const PopupMenuItem(
+                        value: 'delete',
+                        child: Text('Excluir'),
+                      ),
+                  ],
+                ),
+                Icon(isSelected ? Icons.expand_less : Icons.expand_more),
+              ],
+            ),
+            onTap: () {
+              viewModel.selectTable(table.id);
+            },
+          ),
+
+          AnimatedCrossFade(
+            firstChild: const SizedBox.shrink(),
+            secondChild: isSelected
+                ? _buildRangesList(context, table.ranges)
+                : const SizedBox.shrink(),
+            crossFadeState: isSelected
+                ? CrossFadeState.showSecond
+                : CrossFadeState.showFirst,
+            duration: const Duration(milliseconds: 300),
+          ),
+        ],
       ),
     );
   }
@@ -113,80 +145,6 @@ class DiscountTableItem extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header com informações da tabela
-          // Container(
-          //   padding: const EdgeInsets.all(12.0),
-          //   decoration: BoxDecoration(
-          //     color: Theme.of(
-          //       context,
-          //     ).colorScheme.primaryContainer.withOpacity(0.3),
-          //     borderRadius: BorderRadius.circular(8.0),
-          //     border: Border.all(
-          //       color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
-          //       width: 1.0,
-          //     ),
-          //   ),
-          //   child: Row(
-          //     children: [
-          //       Icon(
-          //         Icons.table_chart,
-          //         color: Theme.of(context).colorScheme.primary,
-          //         size: 20.0,
-          //       ),
-          //       const SizedBox(width: 8.0),
-          //       Expanded(
-          //         child: Column(
-          //           crossAxisAlignment: CrossAxisAlignment.start,
-          //           children: [
-          //             Text(
-          //               'Tipo de Desconto',
-          //               style: Theme.of(context).textTheme.labelSmall?.copyWith(
-          //                 color: Theme.of(context).colorScheme.onSurfaceVariant,
-          //                 fontWeight: FontWeight.w500,
-          //               ),
-          //             ),
-          //             Text(
-          //               (() {
-          //                 switch (table.discountType) {
-          //                   case "base":
-          //                     return "Base";
-          //                   case "personal":
-          //                     return "Personalizada";
-          //                   default:
-          //                     return "";
-          //                 }
-          //               })(),
-          //               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-          //                 fontWeight: FontWeight.bold,
-          //                 color: Theme.of(context).colorScheme.primary,
-          //               ),
-          //             ),
-          //           ],
-          //         ),
-          //       ),
-          //       Container(
-          //         padding: const EdgeInsets.symmetric(
-          //           horizontal: 8.0,
-          //           vertical: 4.0,
-          //         ),
-          //         decoration: BoxDecoration(
-          //           color: Theme.of(context).colorScheme.primary,
-          //           borderRadius: BorderRadius.circular(12.0),
-          //         ),
-          //         child: Text(
-          //           '${ranges.length} faixas',
-          //           style: Theme.of(context).textTheme.labelSmall?.copyWith(
-          //             color: Theme.of(context).colorScheme.onPrimary,
-          //             fontWeight: FontWeight.bold,
-          //           ),
-          //         ),
-          //       ),
-          //     ],
-          //   ),
-          // ),
-          // const SizedBox(height: 16.0),
-
-          // Título das faixas
           Row(
             children: [
               Icon(
@@ -313,7 +271,7 @@ class DiscountTableItem extends StatelessWidget {
                 ),
               ),
             );
-          }).toList(),
+          }),
 
           // Resumo das faixas
           if (ranges.isNotEmpty) ...[

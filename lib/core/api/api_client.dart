@@ -8,6 +8,7 @@ class ApiClient {
 
   Future<dynamic> get(String path) async {
     final response = await http.get(Uri.parse('$baseUrl$path'));
+    print(response.statusCode);
     return response.body;
   }
 

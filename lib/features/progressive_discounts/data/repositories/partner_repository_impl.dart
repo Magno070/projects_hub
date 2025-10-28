@@ -22,7 +22,7 @@ class PartnerRepositoryImpl implements PartnerRepository {
   Future<PartnerEntity?> getPartner(String partnerId) async {
     final model = await _dataSource.getPartner(partnerId);
     if (model == null) {
-      throw Exception('Partner not found');
+      return null;
     }
     return PartnerEntity.fromModel(model);
   }

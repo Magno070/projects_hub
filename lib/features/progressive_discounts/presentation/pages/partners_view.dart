@@ -49,11 +49,19 @@ class _PartnersViewState extends State<PartnersView> {
               itemCount: consumerViewModel.partners.length,
               itemBuilder: (context, index) {
                 final partner = consumerViewModel.partners[index];
+
+                // --- MODIFICADO ---
+                // Verifica se este item é o selecionado
+                final isSelected =
+                    consumerViewModel.selectedPartnerId == partner.id;
+
                 return PartnerItem(
                   partner: partner,
                   viewModel: consumerViewModel,
                   allTables: consumerViewModel.allTables,
+                  isSelected: isSelected, // Passa o status
                 );
+                // --- FIM DA MODIFICAÇÃO ---
               },
             ),
           );

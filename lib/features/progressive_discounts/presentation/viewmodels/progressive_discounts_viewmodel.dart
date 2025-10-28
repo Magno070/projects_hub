@@ -19,9 +19,20 @@ class ProgressiveDiscountsViewModel extends BaseViewModel {
 
   DiscountTableEntity? _baseDiscountTable;
   List<DiscountTableEntity> _customDiscountTables = [];
+  String? _selectedTableId;
 
   DiscountTableEntity? get baseDiscountTable => _baseDiscountTable;
   List<DiscountTableEntity> get customDiscountTables => _customDiscountTables;
+  String? get selectedTableId => _selectedTableId;
+
+  void selectTable(String tableId) {
+    if (_selectedTableId == tableId) {
+      _selectedTableId = null;
+    } else {
+      _selectedTableId = tableId;
+    }
+    notifyListeners();
+  }
 
   Future<void> loadDiscountTables() async {
     await executeWithLoading(() async {
@@ -59,6 +70,10 @@ class ProgressiveDiscountsViewModel extends BaseViewModel {
       await _deleteTableUseCase.call(id);
     });
 
+    if (_selectedTableId == id) {
+      _selectedTableId = null;
+    }
+
     if (errorMessage == null) {
       loadDiscountTables();
     }
@@ -68,6 +83,8 @@ class ProgressiveDiscountsViewModel extends BaseViewModel {
     await executeWithLoading(() async {
       await _setAsBaseUseCase.call(id);
     });
+
+    _selectedTableId = null;
 
     if (errorMessage == null) {
       loadDiscountTables();

@@ -8,6 +8,7 @@ import 'package:projects_hub/features/progressive_discounts/domain/usecases/part
 class PartnersViewModel extends BaseViewModel {
   final GetAllPartnersUseCase _getAllPartnersUseCase;
   final GetAllDiscountTablesUseCase _getAllTablesUseCase;
+  final GetPartnerUseCase _getPartnerUseCase;
   final UpdatePartnerClientsAmountUseCase _updateClientsAmountUseCase;
   final UpdatePartnerDailyPriceUseCase _updateDailyPriceUseCase;
   final UpdatePartnerDiscountsTableUseCase _updateTableUseCase;
@@ -17,6 +18,7 @@ class PartnersViewModel extends BaseViewModel {
   PartnersViewModel(
     this._getAllPartnersUseCase,
     this._getAllTablesUseCase,
+    this._getPartnerUseCase,
     this._updateClientsAmountUseCase,
     this._updateDailyPriceUseCase,
     this._updateTableUseCase,
@@ -26,9 +28,11 @@ class PartnersViewModel extends BaseViewModel {
 
   List<PartnerEntity> _partners = [];
   List<DiscountTableEntity> _allTables = [];
+  String? _selectedPartnerId;
 
   List<PartnerEntity> get partners => _partners;
   List<DiscountTableEntity> get allTables => _allTables;
+  String? get selectedPartnerId => _selectedPartnerId;
 
   Future<void> loadData() async {
     await executeWithLoading(() async {
@@ -50,6 +54,26 @@ class PartnersViewModel extends BaseViewModel {
 
       notifyListeners();
     });
+  }
+
+  void selectPartner(String partnerId) {
+    if (_selectedPartnerId == partnerId) {
+      _selectedPartnerId = null;
+    } else {
+      _selectedPartnerId = partnerId;
+    }
+    notifyListeners();
+  }
+
+  Future<PartnerEntity?> getPartner(String partnerId) async {
+    PartnerEntity? partner;
+    await executeWithLoading(() async {
+      partner = await _getPartnerUseCase.call(partnerId);
+      if (partner != null) {
+        _selectedPartnerId = partner!.id;
+      }
+    });
+    return partner;
   }
 
   Future<bool> createPartner({
@@ -126,6 +150,11 @@ class PartnersViewModel extends BaseViewModel {
       await _deletePartnerUseCase.call(partnerId);
       // Remove da lista local
       _partners.removeWhere((p) => p.id == partnerId);
+
+      if (_selectedPartnerId == partnerId) {
+        _selectedPartnerId = null;
+      }
+
       notifyListeners();
     });
   }

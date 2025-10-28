@@ -91,6 +91,8 @@ class _ProgressiveDiscountsViewState extends State<ProgressiveDiscountsView> {
           table: viewModel.baseDiscountTable!,
           viewModel: viewModel,
           isBaseTable: true,
+          isSelected:
+              viewModel.selectedTableId == viewModel.baseDiscountTable!.id,
         ),
       ],
     );
@@ -110,6 +112,7 @@ class _ProgressiveDiscountsViewState extends State<ProgressiveDiscountsView> {
           table: table,
           viewModel: viewModel,
           isBaseTable: false,
+          isSelected: viewModel.selectedTableId == table.id,
         );
       },
     );

@@ -39,6 +39,8 @@ Future<void> configureDependencies() async {
   );
 
   // Use Cases
+
+  /// Discount Table Use Cases
   getIt.registerLazySingleton<GetDiscountTableUseCase>(
     () => GetDiscountTableUseCase(getIt<DiscountTableRepository>()),
   );
@@ -63,6 +65,7 @@ Future<void> configureDependencies() async {
     () => SetNewBaseDiscountTableUseCase(getIt<DiscountTableRepository>()),
   );
 
+  /// Partner Use Cases
   getIt.registerLazySingleton<GetAllPartnersUseCase>(
     () => GetAllPartnersUseCase(getIt<PartnerRepository>()),
   );
@@ -75,11 +78,15 @@ Future<void> configureDependencies() async {
   getIt.registerLazySingleton<UpdatePartnerDiscountsTableUseCase>(
     () => UpdatePartnerDiscountsTableUseCase(
       getIt<PartnerRepository>(),
-      getIt<DiscountTableRepository>(), // Reutiliza o repositório já registrado
+      getIt<DiscountTableRepository>(),
     ),
   );
   getIt.registerLazySingleton<DeletePartnerUseCase>(
     () => DeletePartnerUseCase(getIt<PartnerRepository>()),
+  );
+
+  getIt.registerLazySingleton<GetPartnerUseCase>(
+    () => GetPartnerUseCase(getIt<PartnerRepository>()),
   );
 
   getIt.registerLazySingleton<CreatePartnerUseCase>(
@@ -103,9 +110,8 @@ Future<void> configureDependencies() async {
   getIt.registerFactory<PartnersViewModel>(
     () => PartnersViewModel(
       getIt<GetAllPartnersUseCase>(),
-      getIt<
-        GetAllDiscountTablesUseCase
-      >(), // Reutiliza o use case já registrado
+      getIt<GetAllDiscountTablesUseCase>(),
+      getIt<GetPartnerUseCase>(),
       getIt<UpdatePartnerClientsAmountUseCase>(),
       getIt<UpdatePartnerDailyPriceUseCase>(),
       getIt<UpdatePartnerDiscountsTableUseCase>(),

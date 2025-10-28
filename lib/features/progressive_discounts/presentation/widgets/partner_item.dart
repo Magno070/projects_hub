@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 import 'package:projects_hub/core/helpers/debouncer.dart';
+import 'package:projects_hub/core/router/app_router.dart';
 import 'package:projects_hub/features/progressive_discounts/domain/entities/discount_table_entity.dart';
 import 'package:projects_hub/features/progressive_discounts/domain/entities/partner_entity.dart';
 import 'package:projects_hub/features/progressive_discounts/presentation/viewmodels/partners_viewmodel.dart';
@@ -9,12 +11,14 @@ class PartnerItem extends StatefulWidget {
   final PartnerEntity partner;
   final PartnersViewModel viewModel;
   final List<DiscountTableEntity> allTables;
+  final bool isSelected;
 
   const PartnerItem({
     super.key,
     required this.partner,
     required this.viewModel,
     required this.allTables,
+    required this.isSelected,
   });
 
   @override
@@ -36,6 +40,18 @@ class _PartnerItemState extends State<PartnerItem> {
     _clientsController = TextEditingController(
       text: widget.partner.clientsAmount.toString(),
     );
+  }
+
+  @override
+  void didUpdateWidget(covariant PartnerItem oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Se o widget for atualizado com um parceiro *diferente*,
+    // reseta os c
+    //ontroladores de texto.
+    if (widget.partner.id != oldWidget.partner.id) {
+      _priceController.text = widget.partner.dailyPrice.toString();
+      _clientsController.text = widget.partner.clientsAmount.toString();
+    }
   }
 
   @override
@@ -70,60 +86,97 @@ class _PartnerItemState extends State<PartnerItem> {
         ),
       ),
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      child: ExpansionTile(
-        title: Text(widget.partner.name),
-        subtitle: Text(
-          'Tabela: ${partnerTable.nickname} (${partnerTable.discountType})',
-        ),
-        trailing: IconButton(
-          icon: const Icon(Icons.delete_outline, color: Colors.red),
-          onPressed: () => _showDeleteDialog(context),
-        ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
+          ListTile(
+            title: Text(widget.partner.name),
+            subtitle: Text(
+              'Tabela: ${partnerTable.nickname} (${partnerTable.discountType})',
+            ),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                _buildTextField(
-                  context,
-                  controller: _priceController,
-                  label: 'Preço Diário (R\$)',
-                  icon: Icons.monetization_on_outlined,
-                  debouncer: _priceDebouncer,
-                  isDecimal: true,
-                  onChanged: (value) {
-                    final price = double.tryParse(value);
-                    if (price != null && price > 0) {
-                      widget.viewModel.updateDailyPrice(
-                        widget.partner.id,
-                        price,
-                      );
-                    }
-                  },
+                IconButton(
+                  icon: const Icon(Icons.info_outline),
+                  onPressed: () => context.push(
+                    AppRoutes.progressiveDiscountsViewPartnerInfo.replaceAll(
+                      ':partnerId',
+                      widget.partner.id,
+                    ),
+                  ),
                 ),
-                const SizedBox(height: 16),
-                _buildTextField(
-                  context,
-                  controller: _clientsController,
-                  label: 'Qtd. Clientes',
-                  icon: Icons.people_outline,
-                  debouncer: _clientsDebouncer,
-                  isDecimal: false,
-                  onChanged: (value) {
-                    final clients = int.tryParse(value);
-                    if (clients != null && clients >= 0) {
-                      widget.viewModel.updateClientsAmount(
-                        widget.partner.id,
-                        clients,
-                      );
-                    }
-                  },
+                IconButton(
+                  icon: const Icon(Icons.delete_outline, color: Colors.red),
+                  onPressed: () => _showDeleteDialog(context),
                 ),
-                const SizedBox(height: 16),
-                _buildDropdown(context, partnerTable),
+                Icon(widget.isSelected ? Icons.expand_less : Icons.expand_more),
               ],
             ),
+            onTap: () {
+              widget.viewModel.selectPartner(widget.partner.id);
+            },
           ),
+
+          AnimatedCrossFade(
+            firstChild: const SizedBox.shrink(),
+            secondChild: widget.isSelected
+                ? _buildEditableBody(context, partnerTable)
+                : const SizedBox.shrink(),
+            crossFadeState: widget.isSelected
+                ? CrossFadeState.showSecond
+                : CrossFadeState.showFirst,
+            duration: const Duration(milliseconds: 300),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildEditableBody(
+    BuildContext context,
+    DiscountTableEntity partnerTable,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 16.0),
+      child: Column(
+        children: [
+          const Divider(),
+          const SizedBox(height: 16),
+          _buildTextField(
+            context,
+            controller: _priceController,
+            label: 'Preço Diário (R\$)',
+            icon: Icons.monetization_on_outlined,
+            debouncer: _priceDebouncer,
+            isDecimal: true,
+            onChanged: (value) {
+              final price = double.tryParse(value);
+              if (price != null && price > 0) {
+                widget.viewModel.updateDailyPrice(widget.partner.id, price);
+              }
+            },
+          ),
+          const SizedBox(height: 16),
+          _buildTextField(
+            context,
+            controller: _clientsController,
+            label: 'Qtd. Clientes',
+            icon: Icons.people_outline,
+            debouncer: _clientsDebouncer,
+            isDecimal: false,
+            onChanged: (value) {
+              final clients = int.tryParse(value);
+              if (clients != null && clients >= 0) {
+                widget.viewModel.updateClientsAmount(
+                  widget.partner.id,
+                  clients,
+                );
+              }
+            },
+          ),
+          const SizedBox(height: 16),
+          _buildDropdown(context, partnerTable),
         ],
       ),
     );
