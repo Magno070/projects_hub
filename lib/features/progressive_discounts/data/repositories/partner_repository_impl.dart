@@ -119,8 +119,8 @@ class PartnerRepositoryImpl implements PartnerRepository {
             details: model.details
                 .map(
                   (detail) => PartnerDiscountLogDetailsEntity(
-                    initialRange: int.parse(detail.initialRange),
-                    finalRange: int.parse(detail.finalRange),
+                    initialRange: detail.initialRange,
+                    finalRange: detail.finalRange,
                     discount: detail.discount,
                     rangeTotalClientsAmount: detail.rangeTotalClientsAmount,
                     rangeTotalPrice: detail.rangeTotalPrice,

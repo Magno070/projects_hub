@@ -74,10 +74,10 @@ class PartnerApiDataSourceImpl implements PartnerApiDataSource {
       if (response['success'] == false) {
         return [];
       }
-      if (response['calculationLog'] == null) {
+      if (response['calculationLogs'] == null) {
         return [];
       }
-      return (response['calculationLog'] as List)
+      return (response['calculationLogs'] as List)
           .map((json) => PartnerDiscountLogModel.fromJson(json))
           .toList();
     } catch (e) {

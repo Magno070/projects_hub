@@ -1,3 +1,5 @@
+// lib/features/progressive_discounts/presentation/viewmodels/partners_viewmodel.dart
+
 import 'package:flutter/material.dart';
 import 'package:projects_hub/core/base/base_viewmodel.dart';
 import 'package:projects_hub/features/progressive_discounts/domain/entities/discount_table_entity.dart';
@@ -35,11 +37,13 @@ class PartnersViewModel extends BaseViewModel {
   List<DiscountTableEntity> _allTables = [];
   List<PartnerDiscountLogEntity> _calculationHistory = [];
   String? _selectedPartnerId;
+  String? _selectedLogId; // Adicionado
 
   List<PartnerEntity> get partners => _partners;
   List<DiscountTableEntity> get allTables => _allTables;
   String? get selectedPartnerId => _selectedPartnerId;
   List<PartnerDiscountLogEntity> get calculationHistory => _calculationHistory;
+  String? get selectedLogId => _selectedLogId; // Adicionado
 
   Future<void> loadData() async {
     await executeWithLoading(() async {
@@ -68,6 +72,16 @@ class PartnersViewModel extends BaseViewModel {
       _selectedPartnerId = null;
     } else {
       _selectedPartnerId = partnerId;
+    }
+    notifyListeners();
+  }
+
+  // Novo método para selecionar o log
+  void selectLog(String logId) {
+    if (_selectedLogId == logId) {
+      _selectedLogId = null;
+    } else {
+      _selectedLogId = logId;
     }
     notifyListeners();
   }

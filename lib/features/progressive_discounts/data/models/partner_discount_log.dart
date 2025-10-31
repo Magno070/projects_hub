@@ -61,8 +61,8 @@ class PartnerDiscountLogModel {
 }
 
 class PartnerDiscountLogDetailsModel {
-  final String initialRange;
-  final String finalRange;
+  final int initialRange;
+  final int finalRange;
   final double discount;
   final int rangeTotalClientsAmount;
   final double rangeTotalPrice;
