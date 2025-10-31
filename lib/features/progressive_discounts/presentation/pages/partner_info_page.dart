@@ -48,10 +48,8 @@ class _PartnerInfoPageState extends State<PartnerInfoPage> {
 
     if (partner == null) {
       if (viewModel.isLoading) {
-        // Se estiver carregando, mostra um indicador global
         return const Scaffold(body: Center(child: CircularProgressIndicator()));
       }
-      // Se não estiver carregando e o parceiro for nulo, mostra erro
       return Scaffold(
         appBar: AppBar(title: const Text("Registro de Cálculos")),
         body: const Center(child: Text('Parceiro não encontrado.')),
@@ -70,7 +68,6 @@ class _PartnerInfoPageState extends State<PartnerInfoPage> {
             onPressed: viewModel.isLoading
                 ? null
                 : () {
-                    // Chama a função de cálculo no ViewModel
                     viewModel.calculateDiscounts(
                       partner!.id,
                       partner!.discountsTableId,
@@ -81,7 +78,6 @@ class _PartnerInfoPageState extends State<PartnerInfoPage> {
       ),
       body: Column(
         children: [
-          // Exibe a barra de progresso para as operações de cálculo/histórico
           if (viewModel.isLoading) const LinearProgressIndicator(),
           if (viewModel.errorMessage != null && !viewModel.isLoading)
             Padding(
@@ -95,19 +91,6 @@ class _PartnerInfoPageState extends State<PartnerInfoPage> {
               ),
             ),
 
-          const Padding(
-            padding: EdgeInsets.fromLTRB(16, 16, 16, 8),
-            child: Row(
-              children: [
-                Icon(Icons.history, color: Colors.blue),
-                SizedBox(width: 8),
-                Text(
-                  'Histórico de Cálculos',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
-          ),
           Expanded(child: _buildLogHistoryList(viewModel)),
         ],
       ),
@@ -116,8 +99,6 @@ class _PartnerInfoPageState extends State<PartnerInfoPage> {
 
   Widget _buildLogHistoryList(PartnersViewModel viewModel) {
     if (viewModel.isLoading && viewModel.calculationHistory.isEmpty) {
-      // Se estiver carregando mas a lista ainda está vazia (primeiro load),
-      // o indicador de progresso global já é suficiente.
       return const SizedBox.shrink();
     }
 
@@ -127,12 +108,11 @@ class _PartnerInfoPageState extends State<PartnerInfoPage> {
       );
     }
 
-    // Ordenar do mais recente para o mais antigo (melhor UX para logs)
     final sortedHistory = viewModel.calculationHistory.toList()
       ..sort((a, b) => b.calculationDate.compareTo(a.calculationDate));
 
     return ListView.builder(
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.fromLTRB(24, 12, 24, 24),
       itemCount: sortedHistory.length,
       itemBuilder: (context, index) {
         final log = sortedHistory[index];

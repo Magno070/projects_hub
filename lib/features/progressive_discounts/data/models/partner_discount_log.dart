@@ -4,6 +4,7 @@ class PartnerDiscountLogModel {
   final String id;
   final String partnerId;
   final String discountTableId;
+  final String tableNicknameStamp;
   final double partnerDailyPriceStamp;
   final int partnerClientsAmountStamp;
   final double totalPriceResult;
@@ -17,6 +18,7 @@ class PartnerDiscountLogModel {
     required this.id,
     required this.partnerId,
     required this.discountTableId,
+    required this.tableNicknameStamp,
     required this.partnerDailyPriceStamp,
     required this.partnerClientsAmountStamp,
     required this.totalPriceResult,
@@ -32,6 +34,7 @@ class PartnerDiscountLogModel {
       id: json['_id'],
       partnerId: json['partnerId'],
       discountTableId: json['discountTableId'],
+      tableNicknameStamp: json['tableNicknameStamp'],
       partnerDailyPriceStamp: json['partnerDailyPriceStamp'],
       partnerClientsAmountStamp: json['partnerClientsAmountStamp'],
       totalPriceResult: json['totalPriceResult'],
@@ -47,16 +50,6 @@ class PartnerDiscountLogModel {
           )
           .toList(),
     );
-  }
-
-  Map<String, dynamic> toJsonForCreation() {
-    return {
-      'partnerId': partnerId,
-      'discountTableId': discountTableId,
-      'partnerDailyPriceStamp': partnerDailyPriceStamp,
-      'partnerClientsAmountStamp': partnerClientsAmountStamp,
-      'totalPriceResult': totalPriceResult,
-    };
   }
 }
 

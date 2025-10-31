@@ -46,8 +46,7 @@ class _PartnerItemState extends State<PartnerItem> {
   void didUpdateWidget(covariant PartnerItem oldWidget) {
     super.didUpdateWidget(oldWidget);
     // Se o widget for atualizado com um parceiro *diferente*,
-    // reseta os c
-    //ontroladores de texto.
+    // reseta os controladores de texto.
     if (widget.partner.id != oldWidget.partner.id) {
       _priceController.text = widget.partner.dailyPrice.toString();
       _clientsController.text = widget.partner.clientsAmount.toString();
@@ -100,8 +99,7 @@ class _PartnerItemState extends State<PartnerItem> {
                 IconButton(
                   icon: const Icon(Icons.info_outline),
                   onPressed: () => context.push(
-                    AppRoutes.progressiveDiscountsViewPartnerInfo.replaceAll(
-                      ':partnerId',
+                    AppRoutes.progressiveDiscountsViewPartnerInfo(
                       widget.partner.id,
                     ),
                   ),

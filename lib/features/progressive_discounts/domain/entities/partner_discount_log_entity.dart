@@ -4,6 +4,7 @@ class PartnerDiscountLogEntity {
   final String id;
   final String partnerId;
   final String discountTableId;
+  final String tableNicknameStamp;
   final double partnerDailyPriceStamp;
   final int partnerClientsAmountStamp;
   final double totalPriceResult;
@@ -17,6 +18,7 @@ class PartnerDiscountLogEntity {
     required this.id,
     required this.partnerId,
     required this.discountTableId,
+    required this.tableNicknameStamp,
     required this.partnerDailyPriceStamp,
     required this.partnerClientsAmountStamp,
     required this.totalPriceResult,
@@ -31,6 +33,7 @@ class PartnerDiscountLogEntity {
     String? id,
     String? partnerId,
     String? discountTableId,
+    String? tableNicknameStamp,
     double? partnerDailyPriceStamp,
     int? partnerClientsAmountStamp,
     double? totalPriceResult,
@@ -44,6 +47,7 @@ class PartnerDiscountLogEntity {
       id: id ?? this.id,
       partnerId: partnerId ?? this.partnerId,
       discountTableId: discountTableId ?? this.discountTableId,
+      tableNicknameStamp: tableNicknameStamp ?? this.tableNicknameStamp,
       partnerDailyPriceStamp:
           partnerDailyPriceStamp ?? this.partnerDailyPriceStamp,
       partnerClientsAmountStamp:

@@ -18,8 +18,8 @@ class AppRoutes {
       '$progressiveDiscounts/view-tables';
   static const String progressiveDiscountsViewPartners =
       '$progressiveDiscounts/view-partners';
-  static const String progressiveDiscountsViewPartnerInfo =
-      '$progressiveDiscounts/view-partners/info/:partnerId';
+  static String progressiveDiscountsViewPartnerInfo(String partnerId) =>
+      '$progressiveDiscounts/view-partners/info/$partnerId';
 }
 
 class AppRouter {

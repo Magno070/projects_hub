@@ -101,6 +101,7 @@ class PartnerRepositoryImpl implements PartnerRepository {
             id: model.id,
             partnerId: model.partnerId,
             discountTableId: model.discountTableId,
+            tableNicknameStamp: model.tableNicknameStamp,
             partnerDailyPriceStamp: model.partnerDailyPriceStamp,
             partnerClientsAmountStamp: model.partnerClientsAmountStamp,
             totalPriceResult: model.totalPriceResult,
