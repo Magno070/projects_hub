@@ -1,5 +1,3 @@
-import 'package:projects_hub/features/progressive_discounts/data/models/discounts_table_model.dart';
-
 class DiscountTableEntity {
   final String id;
   final String nickname;

@@ -22,16 +22,6 @@ class DiscountsTableModel {
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'nickname': nickname,
-      'discountType': discountType,
-      'ranges': ranges.map((range) => range.toJson()).toList(),
-    };
-  }
-
-  // Método para serialização na criação (sem o campo id)
   Map<String, dynamic> toJsonForCreation() {
     return {
       'nickname': nickname,

@@ -1,3 +1,4 @@
+import 'package:projects_hub/features/progressive_discounts/data/models/partner_discount_log.dart';
 import 'package:projects_hub/features/progressive_discounts/data/models/partner_model.dart';
 
 abstract class PartnerApiDataSource {
@@ -17,4 +18,6 @@ abstract class PartnerApiDataSource {
   });
 
   Future<void> deletePartner(String partnerId);
+
+  Future<List<PartnerDiscountLogModel>> getCalculationHistory(String partnerId);
 }

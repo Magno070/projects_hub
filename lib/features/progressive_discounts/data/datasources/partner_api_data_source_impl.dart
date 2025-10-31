@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:projects_hub/core/api/api_client.dart';
 import 'package:projects_hub/core/api/api_constants.dart';
 import 'package:projects_hub/features/progressive_discounts/data/datasources/partner_api_data_source.dart';
+import 'package:projects_hub/features/progressive_discounts/data/models/partner_discount_log.dart';
 import 'package:projects_hub/features/progressive_discounts/data/models/partner_model.dart';
 
 class PartnerApiDataSourceImpl implements PartnerApiDataSource {
@@ -12,6 +13,7 @@ class PartnerApiDataSourceImpl implements PartnerApiDataSource {
   Future<void> createPartner(PartnerModel model) async {
     try {
       final data = model.toJsonForCreation();
+
       await _apiClient.post('/', data);
     } catch (e) {
       throw Exception('Failed to create partner: $e');
@@ -42,7 +44,10 @@ class PartnerApiDataSourceImpl implements PartnerApiDataSource {
   @override
   Future<PartnerModel?> getPartner(String partnerId) async {
     try {
-      final responseJson = await _apiClient.get('/$partnerId');
+      final responseJson = await _apiClient.get(
+        '/',
+        queryParams: {'id': partnerId},
+      );
       final response = jsonDecode(responseJson);
       if (response['success'] == false) {
         return null;
@@ -57,6 +62,30 @@ class PartnerApiDataSourceImpl implements PartnerApiDataSource {
   }
 
   @override
+  Future<List<PartnerDiscountLogModel>> getCalculationHistory(
+    String partnerId,
+  ) async {
+    try {
+      final responseJson = await _apiClient.get(
+        '/logs',
+        queryParams: {'id': partnerId},
+      );
+      final response = jsonDecode(responseJson);
+      if (response['success'] == false) {
+        return [];
+      }
+      if (response['calculationLog'] == null) {
+        return [];
+      }
+      return (response['calculationLog'] as List)
+          .map((json) => PartnerDiscountLogModel.fromJson(json))
+          .toList();
+    } catch (e) {
+      throw Exception('Failed to get calculation history: $e');
+    }
+  }
+
+  @override
   Future<void> updatePartner({
     required String partnerId,
     String? name,
@@ -66,13 +95,17 @@ class PartnerApiDataSourceImpl implements PartnerApiDataSource {
     String? discountsTableId,
   }) async {
     try {
-      await _apiClient.patch('/$partnerId', {
-        'name': name,
-        'discountType': discountType,
-        'dailyPrice': dailyPrice,
-        'clientsAmount': clientsAmount,
-        'discountsTableId': discountsTableId,
-      });
+      await _apiClient.patch(
+        '/',
+        queryParams: {'id': partnerId},
+        {
+          'name': name,
+          'discountType': discountType,
+          'dailyPrice': dailyPrice,
+          'clientsAmount': clientsAmount,
+          'discountsTableId': discountsTableId,
+        },
+      );
     } catch (e) {
       throw Exception('Failed to update partner: $e');
     }
@@ -81,7 +114,7 @@ class PartnerApiDataSourceImpl implements PartnerApiDataSource {
   @override
   Future<void> deletePartner(String partnerId) async {
     try {
-      await _apiClient.delete('/$partnerId');
+      await _apiClient.delete('/', queryParams: {'id': partnerId});
     } catch (e) {
       throw Exception('Failed to delete partner: $e');
     }

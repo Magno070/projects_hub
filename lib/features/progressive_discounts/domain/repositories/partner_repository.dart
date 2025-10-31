@@ -1,3 +1,4 @@
+import 'package:projects_hub/features/progressive_discounts/domain/entities/partner_discount_log_entity.dart';
 import 'package:projects_hub/features/progressive_discounts/domain/entities/partner_entity.dart';
 
 abstract class PartnerRepository {
@@ -17,4 +18,13 @@ abstract class PartnerRepository {
   });
 
   Future<void> deletePartner(String partnerId);
+
+  Future<void> calculatePartnerDiscounts(
+    String partnerId,
+    String discountTableId,
+  );
+
+  Future<List<PartnerDiscountLogEntity>> getCalculationHistory(
+    String partnerId,
+  );
 }

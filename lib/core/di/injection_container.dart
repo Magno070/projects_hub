@@ -1,4 +1,6 @@
 import 'package:get_it/get_it.dart';
+import 'package:projects_hub/features/progressive_discounts/data/datasources/calculator_api_data_source.dart';
+import 'package:projects_hub/features/progressive_discounts/data/datasources/calculator_api_data_source_impl.dart';
 
 import 'package:projects_hub/features/progressive_discounts/data/datasources/discounts_api_data_source_impl.dart';
 import 'package:projects_hub/features/progressive_discounts/data/datasources/discounts_api_data_source.dart';
@@ -28,6 +30,9 @@ Future<void> configureDependencies() async {
   getIt.registerLazySingleton<PartnerApiDataSource>(
     () => PartnerApiDataSourceImpl(),
   );
+  getIt.registerLazySingleton<CalculatorApiDataSource>(
+    () => CalculatorApiDataSourceImpl(),
+  );
 
   // Repositories
   getIt.registerLazySingleton<DiscountTableRepository>(
@@ -35,7 +40,10 @@ Future<void> configureDependencies() async {
   );
 
   getIt.registerLazySingleton<PartnerRepository>(
-    () => PartnerRepositoryImpl(getIt<PartnerApiDataSource>()),
+    () => PartnerRepositoryImpl(
+      getIt<PartnerApiDataSource>(),
+      getIt<CalculatorApiDataSource>(),
+    ),
   );
 
   // Use Cases
@@ -96,6 +104,14 @@ Future<void> configureDependencies() async {
     ),
   );
 
+  getIt.registerLazySingleton<CalculatePartnerDiscountsUseCase>(
+    () => CalculatePartnerDiscountsUseCase(getIt<PartnerRepository>()),
+  );
+
+  getIt.registerLazySingleton<GetCalculationHistoryUseCase>(
+    () => GetCalculationHistoryUseCase(getIt<PartnerRepository>()),
+  );
+
   // ViewModels
   getIt.registerFactory<ProgressiveDiscountsViewModel>(
     () => ProgressiveDiscountsViewModel(
@@ -117,6 +133,8 @@ Future<void> configureDependencies() async {
       getIt<UpdatePartnerDiscountsTableUseCase>(),
       getIt<DeletePartnerUseCase>(),
       getIt<CreatePartnerUseCase>(),
+      getIt<CalculatePartnerDiscountsUseCase>(),
+      getIt<GetCalculationHistoryUseCase>(),
     ),
   );
 }

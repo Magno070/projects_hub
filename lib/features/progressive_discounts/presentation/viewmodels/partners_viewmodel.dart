@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:projects_hub/core/base/base_viewmodel.dart';
 import 'package:projects_hub/features/progressive_discounts/domain/entities/discount_table_entity.dart';
+import 'package:projects_hub/features/progressive_discounts/domain/entities/partner_discount_log_entity.dart';
 import 'package:projects_hub/features/progressive_discounts/domain/entities/partner_entity.dart';
 import 'package:projects_hub/features/progressive_discounts/domain/usecases/discounts_table_usecase.dart';
 import 'package:projects_hub/features/progressive_discounts/domain/usecases/partner_usecase.dart';
@@ -14,6 +15,8 @@ class PartnersViewModel extends BaseViewModel {
   final UpdatePartnerDiscountsTableUseCase _updateTableUseCase;
   final DeletePartnerUseCase _deletePartnerUseCase;
   final CreatePartnerUseCase _createPartnerUseCase;
+  final CalculatePartnerDiscountsUseCase _calculateDiscountsUseCase;
+  final GetCalculationHistoryUseCase _getCalculationHistoryUseCase;
 
   PartnersViewModel(
     this._getAllPartnersUseCase,
@@ -24,15 +27,19 @@ class PartnersViewModel extends BaseViewModel {
     this._updateTableUseCase,
     this._deletePartnerUseCase,
     this._createPartnerUseCase,
+    this._calculateDiscountsUseCase,
+    this._getCalculationHistoryUseCase,
   );
 
   List<PartnerEntity> _partners = [];
   List<DiscountTableEntity> _allTables = [];
+  List<PartnerDiscountLogEntity> _calculationHistory = [];
   String? _selectedPartnerId;
 
   List<PartnerEntity> get partners => _partners;
   List<DiscountTableEntity> get allTables => _allTables;
   String? get selectedPartnerId => _selectedPartnerId;
+  List<PartnerDiscountLogEntity> get calculationHistory => _calculationHistory;
 
   Future<void> loadData() async {
     await executeWithLoading(() async {
@@ -155,6 +162,23 @@ class PartnersViewModel extends BaseViewModel {
         _selectedPartnerId = null;
       }
 
+      notifyListeners();
+    });
+  }
+
+  Future<void> calculateDiscounts(
+    String partnerId,
+    String discountTableId,
+  ) async {
+    await executeWithLoading(() async {
+      await _calculateDiscountsUseCase.call(partnerId, discountTableId);
+      await getCalculationHistory(partnerId);
+    });
+  }
+
+  Future<void> getCalculationHistory(String partnerId) async {
+    await executeWithLoading(() async {
+      _calculationHistory = await _getCalculationHistoryUseCase.call(partnerId);
       notifyListeners();
     });
   }

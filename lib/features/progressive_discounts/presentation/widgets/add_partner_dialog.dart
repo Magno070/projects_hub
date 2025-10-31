@@ -56,7 +56,6 @@ class _AddPartnerDialogState extends State<AddPartnerDialog> {
 
   @override
   Widget build(BuildContext context) {
-    // Ouve o errorMessage do ViewModel
     final errorMessage = context.watch<PartnersViewModel>().errorMessage;
 
     return AlertDialog(

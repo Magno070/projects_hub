@@ -1,4 +1,5 @@
 import 'package:projects_hub/features/progressive_discounts/domain/entities/discount_table_entity.dart';
+import 'package:projects_hub/features/progressive_discounts/domain/entities/partner_discount_log_entity.dart';
 import 'package:projects_hub/features/progressive_discounts/domain/entities/partner_entity.dart';
 import 'package:projects_hub/features/progressive_discounts/domain/repositories/discount_table_repository.dart';
 import 'package:projects_hub/features/progressive_discounts/domain/repositories/partner_repository.dart';
@@ -163,5 +164,25 @@ class DeletePartnerUseCase {
 
   Future<void> call(String partnerId) async {
     await _repository.deletePartner(partnerId);
+  }
+}
+
+class CalculatePartnerDiscountsUseCase {
+  final PartnerRepository _repository;
+
+  CalculatePartnerDiscountsUseCase(this._repository);
+
+  Future<void> call(String partnerId, String discountTableId) async {
+    await _repository.calculatePartnerDiscounts(partnerId, discountTableId);
+  }
+}
+
+class GetCalculationHistoryUseCase {
+  final PartnerRepository _repository;
+
+  GetCalculationHistoryUseCase(this._repository);
+
+  Future<List<PartnerDiscountLogEntity>> call(String partnerId) async {
+    return await _repository.getCalculationHistory(partnerId);
   }
 }

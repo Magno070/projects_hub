@@ -1,5 +1,3 @@
-import 'package:projects_hub/features/progressive_discounts/data/models/partner_model.dart';
-
 class PartnerEntity {
   final String id;
   final String name;
@@ -16,28 +14,6 @@ class PartnerEntity {
     required this.clientsAmount,
     required this.discountsTableId,
   });
-
-  factory PartnerEntity.fromModel(PartnerModel model) {
-    return PartnerEntity(
-      id: model.id,
-      name: model.name,
-      discountType: model.discountType,
-      dailyPrice: model.dailyPrice,
-      clientsAmount: model.clientsAmount,
-      discountsTableId: model.discountsTableId,
-    );
-  }
-
-  PartnerModel toModel() {
-    return PartnerModel(
-      id: id,
-      name: name,
-      discountType: discountType,
-      dailyPrice: dailyPrice,
-      clientsAmount: clientsAmount,
-      discountsTableId: discountsTableId,
-    );
-  }
 
   PartnerEntity copyWith({
     String? id,

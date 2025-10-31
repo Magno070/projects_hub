@@ -50,8 +50,6 @@ class _PartnersViewState extends State<PartnersView> {
               itemBuilder: (context, index) {
                 final partner = consumerViewModel.partners[index];
 
-                // --- MODIFICADO ---
-                // Verifica se este item é o selecionado
                 final isSelected =
                     consumerViewModel.selectedPartnerId == partner.id;
 
@@ -59,9 +57,8 @@ class _PartnersViewState extends State<PartnersView> {
                   partner: partner,
                   viewModel: consumerViewModel,
                   allTables: consumerViewModel.allTables,
-                  isSelected: isSelected, // Passa o status
+                  isSelected: isSelected,
                 );
-                // --- FIM DA MODIFICAÇÃO ---
               },
             ),
           );
@@ -69,15 +66,11 @@ class _PartnersViewState extends State<PartnersView> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // Limpa qualquer erro antigo antes de abrir o dialog
           viewModel.clearError();
 
-          // MODIFICADO: Chama o showDialog
           showDialog(
             context: context,
             builder: (dialogContext) {
-              // Usa ChangeNotifierProvider.value para prover o viewModel
-              // já existente para o widget do dialog.
               return ChangeNotifierProvider.value(
                 value: viewModel,
                 child: AddPartnerDialog(

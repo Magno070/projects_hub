@@ -36,7 +36,10 @@ class DiscountsApiDataSourceImpl implements DiscountsApiDataSource {
   @override
   Future<DiscountsTableModel> getDiscountTable(String tableId) async {
     try {
-      final responseString = await _apiClient.get('/$tableId');
+      final responseString = await _apiClient.get(
+        '/',
+        queryParams: {'id': tableId},
+      );
 
       final responseJson = jsonDecode(responseString);
 
@@ -97,11 +100,11 @@ class DiscountsApiDataSourceImpl implements DiscountsApiDataSource {
     List<DiscountRange>? ranges,
   }) async {
     try {
-      final response = await _apiClient.patch('/$tableId', {
-        'nickname': nickname,
-        'discountType': discountType,
-        'ranges': ranges,
-      });
+      final response = await _apiClient.patch(
+        '/',
+        queryParams: {'id': tableId},
+        {'nickname': nickname, 'discountType': discountType, 'ranges': ranges},
+      );
     } catch (e) {
       throw Exception('Failed to save discount table: $e');
     }
@@ -110,7 +113,7 @@ class DiscountsApiDataSourceImpl implements DiscountsApiDataSource {
   @override
   Future<void> deleteDiscountTable(String tableId) async {
     try {
-      await _apiClient.delete('/$tableId');
+      await _apiClient.delete('/', queryParams: {'id': tableId});
     } catch (e) {
       throw Exception('Failed to delete discount table: $e');
     }
