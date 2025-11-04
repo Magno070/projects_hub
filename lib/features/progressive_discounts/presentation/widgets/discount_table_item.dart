@@ -193,23 +193,7 @@ class DiscountTableItem extends StatelessWidget {
                 padding: const EdgeInsets.all(12.0),
                 child: Row(
                   children: [
-                    // Ícone de faixa
-                    Container(
-                      width: 32.0,
-                      height: 32.0,
-                      decoration: BoxDecoration(
-                        color: _getRangeColor(context, range.discount),
-                        borderRadius: BorderRadius.circular(16.0),
-                      ),
-                      child: Icon(
-                        Icons.percent,
-                        color: Colors.white,
-                        size: 16.0,
-                      ),
-                    ),
-
                     const SizedBox(width: 12.0),
-
                     // Informações da faixa
                     Expanded(
                       child: Column(
@@ -217,13 +201,11 @@ class DiscountTableItem extends StatelessWidget {
                         children: [
                           Text(
                             '${range.initialRange} - ${range.finalRange} clientes',
-                            style: Theme.of(context).textTheme.bodyMedium
-                                ?.copyWith(
-                                  fontWeight: FontWeight.w600,
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onSurface,
-                                ),
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: Theme.of(context).colorScheme.onSurface,
+                            ),
                           ),
                           Text(
                             'Faixa ${index + 1}',

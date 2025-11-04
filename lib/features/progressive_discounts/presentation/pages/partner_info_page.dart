@@ -59,22 +59,18 @@ class _PartnerInfoPageState extends State<PartnerInfoPage> {
     final partnerName = partner!.name;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Registro de cálculos: $partnerName"),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.calculate_outlined),
-            tooltip: 'Calcular Desconto',
-            onPressed: viewModel.isLoading
-                ? null
-                : () {
-                    viewModel.calculateDiscounts(
-                      partner!.id,
-                      partner!.discountsTableId,
-                    );
-                  },
-          ),
-        ],
+      appBar: AppBar(title: Text("Registro de cálculos: $partnerName")),
+      floatingActionButton: FloatingActionButton(
+        tooltip: 'Calcular Desconto',
+        onPressed: viewModel.isLoading
+            ? null
+            : () {
+                viewModel.calculateDiscounts(
+                  partner!.id,
+                  partner!.discountsTableId,
+                );
+              },
+        child: const Icon(Icons.calculate_outlined),
       ),
       body: Column(
         children: [

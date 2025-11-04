@@ -138,7 +138,7 @@ class _PartnerLogItemState extends State<PartnerLogItem> {
     bool isHighlight = false,
   }) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
         color: color.withOpacity(0.1),
         borderRadius: BorderRadius.circular(6),
@@ -154,7 +154,7 @@ class _PartnerLogItemState extends State<PartnerLogItem> {
           Text(
             label,
             style: TextStyle(
-              fontSize: 10,
+              fontSize: 14,
               fontWeight: FontWeight.w500,
               color: color,
             ),
@@ -162,7 +162,7 @@ class _PartnerLogItemState extends State<PartnerLogItem> {
           Text(
             value,
             style: TextStyle(
-              fontSize: 12,
+              fontSize: 13,
               fontWeight: isHighlight ? FontWeight.bold : FontWeight.w600,
               color: color,
             ),
