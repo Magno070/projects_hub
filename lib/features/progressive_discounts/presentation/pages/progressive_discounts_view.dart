@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projects_hub/features/progressive_discounts/presentation/viewmodels/progressive_discounts_viewmodel.dart';
-import 'package:projects_hub/features/progressive_discounts/presentation/widgets/discount_table_item.dart';
+import 'package:projects_hub/features/progressive_discounts/presentation/widgets/discount_table_item/discount_table_item.dart';
 import 'package:provider/provider.dart';
 
 class ProgressiveDiscountsView extends StatefulWidget {

@@ -1,138 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:projects_hub/features/progressive_discounts/domain/entities/discount_table_entity.dart';
-import 'package:projects_hub/features/progressive_discounts/presentation/viewmodels/progressive_discounts_viewmodel.dart';
 
-class DiscountTableItem extends StatelessWidget {
-  final DiscountTableEntity table;
-  final ProgressiveDiscountsViewModel viewModel;
-  final bool isSelected;
-  final bool isBaseTable;
+class RangesListWidget extends StatelessWidget {
+  final List<DiscountTableRangeEntity> ranges;
 
-  const DiscountTableItem({
-    super.key,
-    required this.table,
-    required this.viewModel,
-    required this.isSelected,
-    this.isBaseTable = false,
-  });
-
-  void _showEditNicknameDialog(BuildContext context) {
-    final controller = TextEditingController(text: table.nickname);
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Editar Nome'),
-          content: TextField(
-            controller: controller,
-            autofocus: true,
-            decoration: const InputDecoration(labelText: 'Nickname'),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Cancelar'),
-            ),
-            TextButton(
-              onPressed: () {
-                viewModel.updateNickname(table.id, controller.text);
-                Navigator.pop(context);
-              },
-              child: const Text('Salvar'),
-            ),
-          ],
-        );
-      },
-    );
-  }
+  const RangesListWidget({super.key, required this.ranges});
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: Colors.white,
-      elevation: 2,
-      shadowColor: Colors.grey.withOpacity(0.3),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-        side: BorderSide(
-          color: Theme.of(context).colorScheme.outline.withOpacity(0.2),
-        ),
-      ),
-      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          ListTile(
-            title: Text(table.nickname),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                PopupMenuButton<String>(
-                  onSelected: (value) {
-                    switch (value) {
-                      case 'edit':
-                        _showEditNicknameDialog(context);
-                        break;
-                      case 'clone':
-                        viewModel.cloneTable(table.id);
-                        break;
-                      case 'set_as_base':
-                        viewModel.setAsBase(table.id);
-                        break;
-                      case 'delete':
-                        viewModel.deleteTable(table.id);
-                        break;
-                    }
-                  },
-                  itemBuilder: (context) => [
-                    const PopupMenuItem(
-                      value: 'edit',
-                      child: Text('Editar Nome'),
-                    ),
-                    const PopupMenuItem(value: 'clone', child: Text('Clonar')),
-                    if (!isBaseTable)
-                      const PopupMenuItem(
-                        value: 'set_as_base',
-                        child: Text('Definir como Base'),
-                      ),
-                    if (!isBaseTable)
-                      const PopupMenuItem(
-                        value: 'delete',
-                        child: Text('Excluir'),
-                      ),
-                  ],
-                ),
-                Icon(isSelected ? Icons.expand_less : Icons.expand_more),
-              ],
-            ),
-            onTap: () {
-              viewModel.selectTable(table.id);
-            },
-          ),
-
-          AnimatedCrossFade(
-            firstChild: const SizedBox.shrink(),
-            secondChild: isSelected
-                ? _buildRangesList(context, table.ranges)
-                : const SizedBox.shrink(),
-            crossFadeState: isSelected
-                ? CrossFadeState.showSecond
-                : CrossFadeState.showFirst,
-            duration: const Duration(milliseconds: 300),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildRangesList(
-    BuildContext context,
-    List<DiscountTableRangeEntity> ranges,
-  ) {
-    // Garante que os ranges estejam ordenados pelo início
-    final sortedRanges = List<DiscountTableRangeEntity>.from(ranges)
-      ..sort((a, b) => a.initialRange.compareTo(b.initialRange));
-
     return Container(
       padding: const EdgeInsets.all(28.0),
       decoration: BoxDecoration(
@@ -165,10 +40,10 @@ class DiscountTableItem extends StatelessWidget {
 
           const SizedBox(height: 12.0),
 
-          ...sortedRanges.asMap().entries.map((entry) {
+          ...ranges.asMap().entries.map((entry) {
             final index = entry.key;
             final range = entry.value;
-            final isLast = index == sortedRanges.length - 1;
+            final isLast = index == ranges.length - 1;
 
             return Container(
               margin: EdgeInsets.only(bottom: isLast ? 0 : 8.0),
@@ -276,7 +151,7 @@ class DiscountTableItem extends StatelessWidget {
                   const SizedBox(width: 8.0),
                   Expanded(
                     child: Text(
-                      'Desconto varia de ${sortedRanges.first.discount.toStringAsFixed(1)}% a ${sortedRanges.last.discount.toStringAsFixed(1)}%',
+                      'Desconto varia de ${ranges.first.discount.toStringAsFixed(1)}% a ${ranges.last.discount.toStringAsFixed(1)}%',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         color: Theme.of(
                           context,

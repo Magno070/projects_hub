@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
+
 import 'package:projects_hub/core/helpers/debouncer.dart';
 import 'package:projects_hub/core/router/app_router.dart';
 import 'package:projects_hub/features/progressive_discounts/domain/entities/discount_table_entity.dart';

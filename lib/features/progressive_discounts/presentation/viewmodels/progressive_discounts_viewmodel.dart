@@ -78,16 +78,4 @@ class ProgressiveDiscountsViewModel extends BaseViewModel {
       loadDiscountTables();
     }
   }
-
-  Future<void> setAsBase(String id) async {
-    await executeWithLoading(() async {
-      await _setAsBaseUseCase.call(id);
-    });
-
-    _selectedTableId = null;
-
-    if (errorMessage == null) {
-      loadDiscountTables();
-    }
-  }
 }

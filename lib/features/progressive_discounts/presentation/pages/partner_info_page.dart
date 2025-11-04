@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:projects_hub/features/progressive_discounts/domain/entities/partner_entity.dart';
 import 'package:projects_hub/features/progressive_discounts/presentation/viewmodels/partners_viewmodel.dart';
-import 'package:projects_hub/features/progressive_discounts/presentation/widgets/partner_discount_log_item.dart';
+import 'package:projects_hub/features/progressive_discounts/presentation/widgets/partner_discount_log_item/partner_discount_log_item.dart';
 import 'package:provider/provider.dart';
 
 class PartnerInfoPage extends StatefulWidget {
