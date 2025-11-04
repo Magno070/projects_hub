@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:projects_hub/features/progressive_discounts/domain/entities/discount_table_entity.dart';
 import 'package:projects_hub/features/progressive_discounts/presentation/viewmodels/progressive_discounts_viewmodel.dart';
-import 'package:projects_hub/features/progressive_discounts/presentation/widgets/discount_table_item/ranges_list_widget.dart';
+import 'package:projects_hub/features/progressive_discounts/presentation/widgets/discount_table_item/ranges_list_widget/ranges_list_widget.dart';
 
 class DiscountTableItem extends StatelessWidget {
   final DiscountTableEntity table;
@@ -107,7 +107,11 @@ class DiscountTableItem extends StatelessWidget {
           AnimatedCrossFade(
             firstChild: const SizedBox.shrink(),
             secondChild: isSelected
-                ? RangesListWidget(ranges: table.ranges)
+                ? RangesListWidget(
+                    ranges: table.ranges,
+                    onSave: (updated) =>
+                        viewModel.updateRanges(table.id, updated),
+                  )
                 : const SizedBox.shrink(),
             crossFadeState: isSelected
                 ? CrossFadeState.showSecond

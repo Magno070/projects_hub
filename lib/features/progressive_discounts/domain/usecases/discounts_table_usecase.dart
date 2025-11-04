@@ -235,3 +235,81 @@ class VerifyDiscountTableRangesUseCase {
     }
   }
 }
+
+class UpdateDiscountTableRangesUseCase {
+  final DiscountTableRepository _repository;
+
+  UpdateDiscountTableRangesUseCase(this._repository);
+
+  Future<void> call({
+    required String tableId,
+    required List<DiscountTableRangeEntity> ranges,
+  }) async {
+    _validateRanges(ranges);
+
+    await _repository.updateDiscountTable(tableId: tableId, ranges: ranges);
+  }
+
+  void _validateRanges(List<DiscountTableRangeEntity> ranges) {
+    if (ranges.isEmpty) {
+      throw ArgumentError('A tabela de descontos deve ter pelo menos um range');
+    }
+
+    final sortedRanges = List<DiscountTableRangeEntity>.from(ranges);
+    sortedRanges.sort((a, b) => a.initialRange.compareTo(b.initialRange));
+
+    if (sortedRanges.first.initialRange != 1) {
+      throw ArgumentError('A primeira faixa de desconto deve começar em 1');
+    }
+
+    for (var range in sortedRanges) {
+      if (range.initialRange >= range.finalRange) {
+        throw ArgumentError(
+          'A faixa de desconto inicial deve ser menor que a faixa de desconto final',
+        );
+      }
+    }
+
+    for (int i = 0; i < sortedRanges.length - 1; i++) {
+      final currentRange = sortedRanges[i];
+      final nextRange = sortedRanges[i + 1];
+
+      if (currentRange.finalRange >= nextRange.initialRange) {
+        throw ArgumentError('As faixas de desconto não podem se sobrepor');
+      }
+    }
+
+    final lastRange = sortedRanges.last;
+    final expectedNumbers = List.generate(
+      lastRange.finalRange,
+      (index) => index + 1,
+    );
+
+    final coveredNumbers = <int>{};
+    for (var range in sortedRanges) {
+      for (int i = range.initialRange; i <= range.finalRange; i++) {
+        coveredNumbers.add(i);
+      }
+    }
+
+    final missingNumbers = expectedNumbers
+        .where((number) => !coveredNumbers.contains(number))
+        .toList();
+
+    if (missingNumbers.isNotEmpty) {
+      throw ArgumentError(
+        'Existem números não cobertos pelos ranges: ${missingNumbers.join(', ')}',
+      );
+    }
+
+    final extraNumbers = coveredNumbers
+        .where((number) => number > lastRange.finalRange)
+        .toList();
+
+    if (extraNumbers.isNotEmpty) {
+      throw ArgumentError(
+        'Existem números extras além do range máximo: ${extraNumbers.join(', ')}',
+      );
+    }
+  }
+}

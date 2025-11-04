@@ -73,6 +73,10 @@ Future<void> configureDependencies() async {
     () => SetNewBaseDiscountTableUseCase(getIt<DiscountTableRepository>()),
   );
 
+  getIt.registerLazySingleton<UpdateDiscountTableRangesUseCase>(
+    () => UpdateDiscountTableRangesUseCase(getIt<DiscountTableRepository>()),
+  );
+
   /// Partner Use Cases
   getIt.registerLazySingleton<GetAllPartnersUseCase>(
     () => GetAllPartnersUseCase(getIt<PartnerRepository>()),
@@ -120,6 +124,7 @@ Future<void> configureDependencies() async {
       getIt<CloneDiscountTableUseCase>(),
       getIt<DeleteDiscountTableUseCase>(),
       getIt<SetNewBaseDiscountTableUseCase>(),
+      getIt<UpdateDiscountTableRangesUseCase>(),
     ),
   );
 

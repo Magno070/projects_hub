@@ -100,11 +100,14 @@ class DiscountsApiDataSourceImpl implements DiscountsApiDataSource {
     List<DiscountRange>? ranges,
   }) async {
     try {
-      final response = await _apiClient.patch(
-        '/',
-        queryParams: {'id': tableId},
-        {'nickname': nickname, 'discountType': discountType, 'ranges': ranges},
-      );
+      final Map<String, dynamic> body = {};
+      if (nickname != null) body['nickname'] = nickname;
+      if (discountType != null) body['discountType'] = discountType;
+      if (ranges != null) {
+        body['ranges'] = ranges.map((e) => e.toJson()).toList();
+      }
+
+      await _apiClient.patch('/', queryParams: {'id': tableId}, body);
     } catch (e) {
       throw Exception('Failed to save discount table: $e');
     }

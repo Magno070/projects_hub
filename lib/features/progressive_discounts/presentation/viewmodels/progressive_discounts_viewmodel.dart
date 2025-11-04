@@ -8,6 +8,7 @@ class ProgressiveDiscountsViewModel extends BaseViewModel {
   final CloneDiscountTableUseCase _cloneTableUseCase;
   final DeleteDiscountTableUseCase _deleteTableUseCase;
   final SetNewBaseDiscountTableUseCase _setAsBaseUseCase;
+  final UpdateDiscountTableRangesUseCase _updateRangesUseCase;
 
   ProgressiveDiscountsViewModel(
     this._getAllTablesUseCase,
@@ -15,6 +16,7 @@ class ProgressiveDiscountsViewModel extends BaseViewModel {
     this._cloneTableUseCase,
     this._deleteTableUseCase,
     this._setAsBaseUseCase,
+    this._updateRangesUseCase,
   );
 
   DiscountTableEntity? _baseDiscountTable;
@@ -73,6 +75,29 @@ class ProgressiveDiscountsViewModel extends BaseViewModel {
     if (_selectedTableId == id) {
       _selectedTableId = null;
     }
+
+    if (errorMessage == null) {
+      loadDiscountTables();
+    }
+  }
+
+  Future<void> updateRanges(
+    String id,
+    List<DiscountTableRangeEntity> ranges,
+  ) async {
+    await executeWithLoading(() async {
+      await _updateRangesUseCase.call(tableId: id, ranges: ranges);
+    });
+
+    if (errorMessage == null) {
+      loadDiscountTables();
+    }
+  }
+
+  Future<void> setAsBase(String id) async {
+    await executeWithLoading(() async {
+      await _setAsBaseUseCase.call(id);
+    });
 
     if (errorMessage == null) {
       loadDiscountTables();
